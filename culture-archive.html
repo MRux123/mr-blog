@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiadomości i Podsumowania | MR</title>
+    
+    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="ikona-bloga.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --accent: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: float 25s infinite alternate ease-in-out; }
+        .blob1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #d8b4fe; }
+        .blob2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #93c5fd; animation-delay: -5s; }
+        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; 
+        }
+
+        nav a {
+            display: block; padding: 12px 24px; text-decoration: none; color: var(--text-main); 
+            font-weight: 600; font-size: 0.9rem; transition: 0.3s; white-space: nowrap; 
+        }
+        nav a:hover { color: var(--accent); background: rgba(0, 113, 227, 0.05); }
+
+        section { min-height: 100vh; padding: 120px 20px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; background: linear-gradient(135deg, #1d1d1f, #434345); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;}
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; margin-top: 40px; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 30px; box-shadow: var(--glass-shadow); cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .tag { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+        .card-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+        .card-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
+        
+        .reveal { opacity: 0; transform: translateY(50px) scale(0.95); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+
+    <nav>
+        <a href="index.html#culture">&larr; Back to Main Page</a>
+    </nav>
+
+    <section>
+        <h1 class="section-title reveal">Monthly Summaries</h1>
+        <p style="color: var(--text-muted); text-align: center;" class="reveal">My analytical voice on global and local events.</p>
+
+        <div class="grid-3">
+            
+            <div class="glass-card reveal" style="animation-delay: 0.1s" onclick="window.location.href='article-marzec-2026.html'">
+                <span class="tag">Marzec 2026</span>
+                <h3 class="card-title">Wiosenne przebudzenie i technologiczny pragmatyzm</h3>
+                <p class="card-text">Ożywienie gospodarcze, inwestycje w zieloną infrastrukturę w Polsce oraz pragmatyczne twarde wdrażanie AI w globalnym biznesie.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.2s" onclick="window.location.href='article-luty-2026.html'">
+                <span class="tag">Luty 2026</span>
+                <h3 class="card-title">Sportowe emocje i algorytmiczna rewolucja</h3>
+                <p class="card-text">Masowe wdrożenia systemów AGI w logistyce oraz widoczne przesunięcia ofert na polskim rynku pracy.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.3s" onclick="window.location.href='article-styczen-2026.html'">
+                <span class="tag">Styczeń 2026</span>
+                <h3 class="card-title">Nowy Rok i nowe zasady gry</h3>
+                <p class="card-text">Zmiany w polityce bezpieczeństwa Europy oraz polskie reformy edukacji w odpowiedzi na erę post-pandemiczną.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.4s" onclick="window.location.href='article-grudzien-2025.html'">
+                <span class="tag">Grudzień 2025</span>
+                <h3 class="card-title">Koniec roku w cieniu starych konfliktów</h3>
+                <p class="card-text">Decyzje rynkowe, wsparcie wojskowe na wschodzie oraz odporność polskiego sektora IT na kryzys inflacyjny.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.5s" onclick="window.location.href='article-listopad-2025.html'">
+                <span class="tag">Listopad 2025</span>
+                <h3 class="card-title">Gospodarcze przegrupowania</h3>
+                <p class="card-text">Kryzys zamówień, redefinicja relacji handlowych z USA i zabezpieczenie energetyczne Polski na zimę.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.6s" onclick="window.location.href='article-pazdziernik-2025.html'">
+                <span class="tag">Październik 2025</span>
+                <h3 class="card-title">Technologiczny wyścig</h3>
+                <p class="card-text">Nagroda Nobla, przyspieszenie prac nad AI w korporacjach oraz dyskusje o polskim modelu transformacji.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.7s" onclick="window.location.href='article-wrzesien-2025.html'">
+                <span class="tag">Wrzesień 2025</span>
+                <h3 class="card-title">Bezpieczeństwo i walka z żywiołem</h3>
+                <p class="card-text">Naruszenia polskiej przestrzeni powietrznej, nagłe załamania pogody oraz tarcia dyplomatyczne na Bliskim Wschodzie.</p>
+                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('active'); } 
+                else { if (entry.boundingClientRect.top > 0) entry.target.classList.remove('active'); }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>

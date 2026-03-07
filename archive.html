@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Archive | MR</title>
+	<meta property="og:title" content="MR Blog | English Diary">
+    <meta property="og:description" content="Mój dziennik i portfolio językowe. Zapraszam!">
+    <meta property="og:image" content="https://blogrukszan.netlify.app/preview.jpg">
+    <meta property="og:url" content="https://blogrukszan.netlify.app/">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Te same style Liquid Glass co na stronie głównej, żeby utrzymać klimat */
+        :root {
+            --bg-color: #f5f5f7;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --accent: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* Tło rozmyte */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: float 25s infinite alternate ease-in-out; }
+        .blob1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #d8b4fe; }
+        .blob2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #93c5fd; animation-delay: -5s; }
+
+        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+/* Prosta nawigacja (Z powiększonym hitboxem i bez zawijania) */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            /* Usunąłem padding stąd, żeby przenieść go na klikalny link */
+            overflow: hidden; 
+        }
+
+        nav a {
+            display: block; /* To sprawia, że CAŁY przycisk staje się hitboxem */
+            padding: 12px 24px;
+            text-decoration: none; color: var(--text-main); 
+            font-weight: 600; font-size: 0.9rem; transition: 0.3s;
+            white-space: nowrap; /* To magiczna linijka, która ZABRANIA zawijania tekstu */
+        }
+        
+        nav a:hover { color: var(--accent); background: rgba(0, 113, 227, 0.05); }
+
+        /* Układ archiwum */
+        section { min-height: 100vh; padding: 120px 20px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; background: linear-gradient(135deg, #1d1d1f, #434345); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; margin-top: 40px; }
+
+        /* Twoje "Prostokąty" (Karty) */
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 30px; box-shadow: var(--glass-shadow); cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .tag { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+        .card-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+        .card-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
+        .read-more { background: transparent; color: var(--accent); border: none; font-weight: 600; cursor: pointer; text-align: left; padding: 0; font-size: 0.95rem; }
+
+        /* OKIENKO POP-UP (MODAL) na 85% ekranu */
+        #post-modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.4); /* Ciemniejsze tło, żeby kliknięcie obok było intuicyjne */
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 2000; overflow-y: auto;
+            opacity: 0; pointer-events: none; transition: 0.4s ease;
+            display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px;
+        }
+        #post-modal.active { opacity: 1; pointer-events: all; }
+        
+        /* Środek okienka (85% szerokości) */
+        .modal-content { 
+            background: white; width: 100%; max-width: 850px; /* Ok 85% ekranu na kompach */
+            padding: 50px; border-radius: 24px; box-shadow: 0 40px 100px rgba(0,0,0,0.2); 
+            position: relative; transform: translateY(30px) scale(0.98); transition: 0.4s ease; 
+        }
+        #post-modal.active .modal-content { transform: translateY(0) scale(1); }
+        .close-modal { position: absolute; top: 20px; right: 30px; font-size: 2rem; cursor: pointer; color: var(--text-muted); }
+
+/* Klasy do animacji (działają w obie strony) */
+        .reveal {
+            opacity: 0; transform: translateY(50px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+
+    <nav>
+        <a href="index.html">&larr; Back to Main Page</a>
+    </nav>
+
+    <section>
+        <h1 class="section-title reveal">Blog Archive</h1>
+        <p style="color: var(--text-muted); text-align: center;" class="reveal">All my previous journal entries and reflections.</p>
+
+        <div class="grid-3">
+            
+            <div class="glass-card reveal" style="animation-delay: 0.1s" onclick="openPost('The importance of feedback', 'Feb 15, 2026', 'Dzisiaj zrozumiałem jak ważny jest feedback. Tutaj wpisujesz cały, bardzo długi tekst, który ma się pojawić dopiero po otwarciu okienka. Możesz tu lać wodę na 3 akapity, a w prostokącie i tak będzie tylko zajawka.')">
+                <span class="tag">Feb 15, 2026</span>
+                <h3 class="card-title">The importance of feedback</h3>
+                <p class="card-text">Dzisiaj zrozumiałem jak ważny jest feedback. Tutaj jest krótki highlight, który zachęca do kliknięcia...</p>
+                <button class="read-more">Read full text &rarr;</button>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.2s" onclick="openPost('Overcoming speaking anxiety', 'Feb 10, 2026', 'Cały, długi tekst wpisu na temat przełamywania barier w mówieniu po angielsku. It was a tough journey but totally worth it. I practiced in front of a mirror.')">
+                <span class="tag">Feb 10, 2026</span>
+                <h3 class="card-title">Overcoming speaking anxiety</h3>
+                <p class="card-text">It was a tough journey but totally worth it. I practiced in front of a mirror...</p>
+                <button class="read-more">Read full text &rarr;</button>
+            </div>
+
+            <div class="glass-card reveal" style="animation-delay: 0.3s" onclick="openPost('My favorite podcasts', 'Jan 28, 2026', 'Oto lista moich ulubionych podcastów, których słucham w drodze do szkoły: 1. Joe Rogan, 2. Huberman Lab. Pomagają mi z osłuchaniem się z naturalnym akcentem.')">
+                <span class="tag">Jan 28, 2026</span>
+                <h3 class="card-title">My favorite podcasts</h3>
+                <p class="card-text">Oto lista moich ulubionych podcastów, których słucham w drodze do szkoły...</p>
+                <button class="read-more">Read full text &rarr;</button>
+            </div>
+
+            </div>
+    </section>
+
+    <div id="post-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePost()">&times;</span>
+            <span id="modal-tag" class="tag" style="margin-bottom: 15px;">Date</span>
+            <h2 id="modal-title" style="font-size: 2.2rem; margin-bottom: 20px; font-weight: 800; letter-spacing: -0.03em;">Title</h2>
+            <p id="modal-body" style="font-size: 1.1rem; line-height: 1.8; color: #444; white-space: pre-wrap;">Body content...</p>
+        </div>
+    </div>
+
+    <script>
+	// --- DODAJEMY TO: Animacje Scrollytelling ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    if (entry.boundingClientRect.top > 0) {
+                        entry.target.classList.remove('active'); 
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+        const modal = document.getElementById('post-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalTag = document.getElementById('modal-tag');
+        const modalBody = document.getElementById('modal-body');
+
+        // Otwieranie
+        function openPost(title, tag, body) {
+            modalTitle.innerText = title;
+            modalTag.innerText = tag;
+            modalBody.innerText = body;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Blokuje scroll strony w tle
+        }
+
+        // Zamykanie przyciskiem X
+        function closePost() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Odblokowuje scroll
+        }
+
+        // MAGICZNY KOD: Zamykanie po kliknięciu W TŁO (obok okienka)
+        modal.addEventListener('click', function(event) {
+            // Jeśli kliknąłeś dokładnie w to ciemne tło (a nie w biały tekst/prostokąt w środku)
+            if (event.target === modal) {
+                closePost();
+            }
+        });
+    </script>
+</body>
+</html>
