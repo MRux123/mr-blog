@@ -588,34 +588,34 @@
         const authBtn = document.getElementById('auth-btn');
         
         if (window.netlifyIdentity) {
-            // Przy załadowaniu strony - jeśli jest user, zmień tekst
+            // Po wejściu na stronę - jeśli czytelnik jest zalogowany, widzi "My Profile"
             netlifyIdentity.on('init', user => {
-                if (user) authBtn.innerText = "Admin Panel";
+                if (user) authBtn.innerText = "My Profile";
             });
             
-            // Zdarzenie login (np. przy logowaniu lub odświeżaniu sesji)
+            // Kiedy czytelnik się zaloguje - NIE PRZERZUCAMY GO DO /ADMIN!
             netlifyIdentity.on('login', user => {
-                authBtn.innerText = "Admin Panel";
-                netlifyIdentity.close(); // Automatycznie zamyka okienko po zalogowaniu
+                authBtn.innerText = "My Profile";
+                netlifyIdentity.close(); 
             });
             
-            // Po wylogowaniu przywraca napis
+            // Po wylogowaniu wracamy do "Log in"
             netlifyIdentity.on('logout', () => {
                 authBtn.innerText = "Log in";
             });
         }
 
-        // To uruchamia się TYLKO po fizycznym kliknięciu w przycisk
+        // Kiedy zwykły użytkownik klika przycisk logowania w menu
         function handleAuth(e) {
             e.preventDefault();
             if (typeof triggerHaptic === 'function') triggerHaptic();
             
             const user = netlifyIdentity.currentUser();
             if (user) {
-                // Jeśli jesteś już zalogowany, przenosi Cię do panelu
-                window.location.href = "/admin/"; 
+                // Jeśli jest już zalogowany, otwieramy mu jego "Profil" (menu Netlify)
+                netlifyIdentity.open(); 
             } else {
-                // Jeśli nie jesteś, wysuwa okienko logowania
+                // Jeśli nie, wysuwamy okienko do logowania/rejestracji
                 netlifyIdentity.open(); 
             }
         }
@@ -623,6 +623,7 @@
 </body>
 
 </html>
+
 
 
 
