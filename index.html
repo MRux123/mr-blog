@@ -182,6 +182,17 @@
         @media (max-width: 600px) {
             .creative-gallery { grid-template-columns: 1fr; } /* Na telefonie 1 pod drugim */
         }
+		/* Naprawa paska nawigacji TYLKO na komputerach (żeby nie łamał się na dwie linie) */
+        @media (min-width: 769px) {
+            nav {
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+            }
+            nav a {
+                padding: 12px 15px; /* Minimalnie mniejsze odstępy, żeby wszystko ładnie się zmieściło */
+            }
+        }
     </style>
 </head>
 <body>
@@ -610,6 +621,7 @@
 </body>
 
 </html>
+
 
 
 
