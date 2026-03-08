@@ -73,15 +73,16 @@
             transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1.1), width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1.1), opacity 0.3s ease;
         }
 
-        @media (max-width: 850px) {
+            @media (max-width: 850px) {
             .hamburger-btn { display: flex; }
             .nav-bubble { display: none; }
             nav {
+                display: flex; /* TEGO BRAKOWAŁO! To ustawia linki w kolumnę */
                 top: 0; left: -100%; transform: translateX(0); width: 75vw; height: 100vh;
                 flex-direction: column; align-items: flex-start; justify-content: center;
                 border-radius: 0 30px 30px 0; padding: 40px; gap: 20px; border-left: none;
             }
-            nav a { font-size: 1.5rem; padding: 10px 0; width: 100%; }
+            nav a { font-size: 1.5rem; padding: 10px 0; width: 100%; display: block; }
             body.menu-open nav { left: 0; box-shadow: 30px 0 60px rgba(0,0,0,0.1); }
             body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
             body.menu-open .hamburger-btn div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -182,17 +183,23 @@
         @media (max-width: 600px) {
             .creative-gallery { grid-template-columns: 1fr; } /* Na telefonie 1 pod drugim */
         }
-/* Naprawa paska nawigacji TYLKO na komputerach (zwiększona grubość) */
-        @media (min-width: 769px) {
+/* Naprawa paska nawigacji TYLKO na komputerach (zwiększona grubość i elastyczność) */
+        @media (min-width: 851px) { /* ZMIANA NA 851px - koniec konfliktu z telefonem! */
             nav {
                 display: flex;
                 align-items: center;
                 white-space: nowrap;
-                padding: 6px 15px; /* To dodaje paskowi głównej objętości (oś Y i X) */
+                padding: 6px 15px; 
+                max-width: 95vw; /* Zabezpiecza przed ucinaniem */
+                overflow-x: auto; /* Pozwala zawartości lekko się przesuwać na mniejszych oknach */
+                -ms-overflow-style: none; /* Ukrywa pasek przewijania */
+                scrollbar-width: none;
             }
+            nav::-webkit-scrollbar { display: none; }
+            
             nav a {
-                padding: 14px 20px; /* Zwiększa pionowy i poziomy margines samych przycisków */
-                font-size: 0.95rem; /* Tyci większa czcionka, żeby proporcjonalnie pasowała do grubszego paska */
+                padding: 14px 20px; 
+                font-size: 0.95rem; 
             }
         }
     </style>
@@ -623,6 +630,7 @@
 </body>
 
 </html>
+
 
 
 
