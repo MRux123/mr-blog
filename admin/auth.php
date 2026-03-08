@@ -1,5 +1,5 @@
 <?php
-$client_id = 'Ov23li3kgNlDH7K0oX1m'; 
+$client_id = 'Ov23li3kgNlDH7KOoX1m'; 
 $client_secret = '40f3dd2dca41f839925615bc1661093609e1e29c'; 
 
 if (!isset($_GET['code'])) {
