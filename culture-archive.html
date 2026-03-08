@@ -41,9 +41,9 @@
         .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2;}
         .card-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
         
-        /* Select Sortowania */
+        /* Select Sortowania - Poprawiony right padding */
         .sort-container { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 30px; margin-top: 20px; }
-        .sort-select { padding: 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
+        .sort-select { padding: 10px 40px 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
         .sort-select:hover { background: white; }
     </style>
 </head>
@@ -60,8 +60,8 @@
 
         <div class="sort-container">
             <select id="sort-select" class="sort-select" onchange="renderGrid()">
-                <option value="asc">Chronologicznie (A-Z)</option>
-                <option value="desc">Najnowsze wpierw (Z-A)</option>
+                <option value="asc">Oldest first (A-Z)</option>
+                <option value="desc">Newest first (Z-A)</option>
             </select>
         </div>
 
@@ -71,7 +71,7 @@
     </section>
 
     <script>
-        let allPosts = []; // Tu przechowujemy pobraną bazę
+        let allPosts = []; 
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
 
         function renderGrid() {
@@ -84,7 +84,6 @@
                 return;
             }
 
-            // Magia Sortowania: asc (A-Z, od najstarszego), desc (Z-A, od najnowszego)
             const sortedPosts = allPosts.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -114,7 +113,7 @@
             })
             .then(data => {
                 allPosts = data.posts || [];
-                renderGrid(); // Pierwsze rysowanie kart domyślnie od A-Z
+                renderGrid(); 
             })
             .catch(error => {
                 console.error('Error:', error);
