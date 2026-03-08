@@ -78,8 +78,7 @@
                     return;
                 }
 
-                const sortedPosts = data.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+                    const sortedPosts = data.posts.sort((a, b) => new Date(a.date) - new Date(b.date));
                 sortedPosts.forEach((post, index) => {
                     const dateObj = new Date(post.date);
                     const monthYear = dateObj.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
@@ -102,3 +101,4 @@
     </script>
 </body>
 </html>
+
