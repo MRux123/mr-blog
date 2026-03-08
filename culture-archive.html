@@ -75,63 +75,153 @@
         <a href="index.html#culture">&larr; Back to Main Page</a>
     </nav>
 
-    <section>
-        <h1 class="section-title reveal">Monthly Summaries</h1>
-        <p style="color: var(--text-muted); text-align: center;" class="reveal">My analytical voice on global and local events.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article | MR Blog</title>
+    <link id="dynamic-favicon" rel="icon" type="image/jpeg" href="ikona-bloga.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        <div class="grid-3">
-            
-            <div class="glass-card reveal" style="animation-delay: 0.1s" onclick="window.location.href='article-marzec-2026.html'">
-                <span class="tag">Marzec 2026</span>
-                <h3 class="card-title">Wiosenne przebudzenie i technologiczny pragmatyzm</h3>
-                <p class="card-text">Ożywienie gospodarcze, inwestycje w zieloną infrastrukturę w Polsce oraz pragmatyczne twarde wdrażanie AI w globalnym biznesie.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+    <style>
+        :root {
+            --bg-color: #f5f5f7; --text-main: #1d1d1f; --text-muted: #86868b;
+            --accent: #0071e3; --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6); --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
 
-            <div class="glass-card reveal" style="animation-delay: 0.2s" onclick="window.location.href='article-luty-2026.html'">
-                <span class="tag">Luty 2026</span>
-                <h3 class="card-title">Sportowe emocje i algorytmiczna rewolucja</h3>
-                <p class="card-text">Masowe wdrożenia systemów AGI w logistyce oraz widoczne przesunięcia ofert na polskim rynku pracy.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: float 25s infinite alternate ease-in-out; }
+        .blob1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #d8b4fe; }
+        .blob2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #93c5fd; animation-delay: -5s; }
+        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.1); } }
 
-            <div class="glass-card reveal" style="animation-delay: 0.3s" onclick="window.location.href='article-styczen-2026.html'">
-                <span class="tag">Styczeń 2026</span>
-                <h3 class="card-title">Nowy Rok i nowe zasady gry</h3>
-                <p class="card-text">Zmiany w polityce bezpieczeństwa Europy oraz polskie reformy edukacji w odpowiedzi na erę post-pandemiczną.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; align-items: center; white-space: nowrap; padding: 6px 15px; max-width: 95vw; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none;
+        }
+        nav::-webkit-scrollbar { display: none; }
+        nav a { display: block; padding: 14px 20px; text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
+        nav a:hover { color: var(--accent); background: rgba(0, 113, 227, 0.05); border-radius: 50px;}
 
-            <div class="glass-card reveal" style="animation-delay: 0.4s" onclick="window.location.href='article-grudzien-2025.html'">
-                <span class="tag">Grudzień 2025</span>
-                <h3 class="card-title">Koniec roku w cieniu starych konfliktów</h3>
-                <p class="card-text">Decyzje rynkowe, wsparcie wojskowe na wschodzie oraz odporność polskiego sektora IT na kryzys inflacyjny.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+        article { min-height: 100vh; padding: 120px 20px 80px 20px; max-width: 850px; margin: 0 auto; }
+        .article-tag { font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 15px; display: inline-block; }
+        .article-title { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; line-height: 1.1; }
+        
+        .article-meta-bar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); padding: 15px 0; margin-bottom: 40px; flex-wrap: wrap; gap: 15px; }
+        .author-info { display: flex; flex-direction: column; }
+        .author-name { font-weight: 700; color: var(--text-main); font-size: 1rem; }
+        .update-time { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-top: 3px; }
+        
+        .save-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: var(--text-main); transition: 0.3s; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .save-btn:hover { background: white; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
 
-            <div class="glass-card reveal" style="animation-delay: 0.5s" onclick="window.location.href='article-listopad-2025.html'">
-                <span class="tag">Listopad 2025</span>
-                <h3 class="card-title">Gospodarcze przegrupowania</h3>
-                <p class="card-text">Kryzys zamówień, redefinicja relacji handlowych z USA i zabezpieczenie energetyczne Polski na zimę.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+        .glass-container { background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%); -webkit-backdrop-filter: blur(40px) saturate(150%); border: 1px solid var(--glass-border); border-radius: 32px; padding: 50px; box-shadow: var(--glass-shadow); }
+        .article-content p { font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 25px; }
+        .article-content h3 { font-size: 1.8rem; font-weight: 700; margin: 40px 0 20px 0; letter-spacing: -0.02em; }
+        @media (max-width: 600px) { .glass-container { padding: 30px 20px; } .article-meta-bar { flex-direction: column; align-items: flex-start; } }
 
-            <div class="glass-card reveal" style="animation-delay: 0.6s" onclick="window.location.href='article-pazdziernik-2025.html'">
-                <span class="tag">Październik 2025</span>
-                <h3 class="card-title">Technologiczny wyścig</h3>
-                <p class="card-text">Nagroda Nobla, przyspieszenie prac nad AI w korporacjach oraz dyskusje o polskim modelu transformacji.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+        #toast { visibility: hidden; min-width: 250px; background-color: #1d1d1f; color: #fff; text-align: center; border-radius: 30px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 0.9rem; font-weight: 500; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
 
-            <div class="glass-card reveal" style="animation-delay: 0.7s" onclick="window.location.href='article-wrzesien-2025.html'">
-                <span class="tag">Wrzesień 2025</span>
-                <h3 class="card-title">Bezpieczeństwo i walka z żywiołem</h3>
-                <p class="card-text">Naruszenia polskiej przestrzeni powietrznej, nagłe załamania pogody oraz tarcia dyplomatyczne na Bliskim Wschodzie.</p>
-                <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-            </div>
+    <div class="ambient-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
 
+    <nav>
+        <a href="culture-archive.html" onclick="triggerHaptic()">&larr; Back to Archive</a>
+    </nav>
+
+    <article>
+        <div class="article-header">
+            <span class="article-tag" id="post-tag">Loading...</span>
+            <h1 class="article-title" id="post-title">Loading Article...</h1>
         </div>
-    </section>
+
+        <div class="article-meta-bar">
+            <div class="author-info">
+                <span class="author-name" id="post-author">By ...</span>
+                <span class="update-time" id="post-date">Published: ...</span>
+            </div>
+            <div class="action-buttons">
+                <button class="save-btn" onclick="handleSaveClick()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                    Save Story
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-container">
+            <div class="article-content" id="post-body">
+                Fetching data from the secure database...
+            </div>
+        </div>
+    </article>
+
+    <div id="toast">Feature coming soon! Login required to save articles.</div>
+
+    <script>
+        function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
+
+        function handleSaveClick() {
+            triggerHaptic();
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            const btn = document.querySelector('.save-btn svg');
+            btn.setAttribute('fill', 'currentColor');
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+                btn.setAttribute('fill', 'none');
+            }, 3000);
+        }
+
+        // WYCIĄGANIE DANYCH Z BAZY JSON
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        if (!postId) {
+            document.getElementById('post-body').innerHTML = "Error: No article ID provided in the link.";
+        } else {
+            fetch('baza-artykulow.json')
+                .then(response => response.json())
+                .then(data => {
+                    const posts = data.posts || [];
+                    const post = posts.find(p => p.slug === postId); // Szukamy wpisu po linku (slug)
+
+                    if (post) {
+                        const dateObj = new Date(post.date);
+                        document.title = post.title + " | MR Blog";
+                        document.getElementById('post-tag').innerText = "World Events";
+                        document.getElementById('post-title').innerText = post.title;
+                        document.getElementById('post-author').innerText = "By " + (post.author || "Michał Rukszan");
+                        document.getElementById('post-date').innerText = "Published: " + dateObj.toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' }) + " CET (Warsaw)";
+                        
+                        // Konwersja Markdown na HTML
+                        document.getElementById('post-body').innerHTML = marked.parse(post.body);
+                    } else {
+                        document.getElementById('post-body').innerHTML = "Error: Article not found in the database.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('post-body').innerHTML = "Database connection error.";
+                    console.error('Error fetching database:', error);
+                });
+        }
+    </script>
+</body>
+</html>
 
     <script>
         const observer = new IntersectionObserver((entries) => {
@@ -143,4 +233,5 @@
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     </script>
 </body>
+
 </html>
