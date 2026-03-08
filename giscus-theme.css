@@ -1,65 +1,62 @@
-/*! Custom Glassmorphism Theme for MR Blog v2 */
+/*! Custom Liquid Glass Theme for MR Blog */
+
+/* 1. ZMIENNE GISCUSA - Przygotowanie przezroczystości i akcentów */
 main {
-  --color-canvas-default: transparent;
-  --color-canvas-subtle: transparent;
+  /* Usuwamy solidną biel tła Giscusa, aby widzieć gradient strony */
+  --color-canvas-default: transparent !important;
+  --color-canvas-subtle: transparent !important;
   
-  --color-border-default: rgba(255, 255, 255, 0.6);
-  --color-border-muted: rgba(255, 255, 255, 0.3);
+  /* Ciemny tekst, aby był czytelny na jasnym szkle i gradientach */
+  --color-fg-default: #1d1d1f; 
+  --color-fg-muted: #86868b;
   
-  /* Wymuszenie CIEMNEGO tekstu */
-  --color-fg-default: #1d1d1f !important;
-  --color-fg-muted: #86868b !important;
-  --color-fg-subtle: #86868b !important;
-  
-  /* Zamiana ZIELONEGO przycisku GitHuba na Twój Błękitny */
+  /* Twój błękit akcentowy (podmieniamy jaskrawy niebieski GitHuba) */
   --color-accent-fg: #0071e3;
   --color-accent-emphasis: #0071e3;
-  --color-success-emphasis: #0071e3 !important; 
-  --color-success-fg: #0071e3 !important;
-
-  --color-btn-text: #1d1d1f;
-  --color-btn-bg: rgba(255, 255, 255, 0.6);
-  --color-btn-hover-bg: #ffffff;
-  --color-btn-primary-bg: #0071e3 !important;
+  --color-border-primary: #0071e3;
+  
+  /* Cienkie, przezroczyste krawędzie (glass lines) */
+  --color-border-default: rgba(255, 255, 255, 0.4);
+  --color-border-muted: rgba(255, 255, 255, 0.2);
 }
 
-/* CAŁE PUDŁO DO PISANIA - Szklana karta */
+/* 2. CAŁE PUDEŁKO DO PISANIA - Transformacja w "Szklaną Kartę" */
 .gsc-comment-box {
+  /* Przezroczyste, białe tło (jak karty na stronie głównej) */
   background: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(40px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  
+  /* --- EFEKT LIQUID GLASS (KLUCZOWY BLUR) --- */
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  
+  /* Szklana krawędź */
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
   border-radius: 24px !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05) !important;
-  overflow: hidden;
-}
-
-/* ZAKŁADKI WRITE / PREVIEW - Efekt "Liquid Glass" z paska menu */
-.gsc-comment-box-tabs {
-  background: rgba(255, 255, 255, 0.5) !important;
-  backdrop-filter: blur(40px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
-  padding: 10px 15px !important;
-  border-radius: 24px 24px 0 0 !important;
-}
-
-/* Środek wpisywania tekstu */
-.gsc-comment-box-textarea {
-  color: #1d1d1f !important;
-}
-
-/* OPUBLIKOWANE KOMENTARZE - Zgodne z kafelkami na stronie */
-.gsc-comment {
-  background: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(40px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  border-radius: 24px !important;
+  
+  /* Subtelny cień (jak karty na stronie głównej) */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  
+  overflow: hidden; /* Aby blur nie wystawał */
 }
 
-/* Naprawa białego/niewidzialnego tekstu w nagłówkach Giscusa */
-.gsc-header, .gsc-comments-count {
-  color: #1d1d1f !important;
+/* 3. PASEK ZAKŁADEK (WRITE / PREVIEW) - Spójność ze szkłem */
+.gsc-comment-box-tabs {
+  /* Usuwamy solidne, szare tło. Ma być przezroczyste i "szklane" jak cała karta. */
+  background: transparent !important; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 4. POLE TEKSTOWE - Czytelność */
+.gsc-comment-box-textarea {
+  background: transparent !important;
+  color: #1d1d1f !important; /* Ciemny tekst w polu wpisywania */
+}
+
+/* 5. OPUBLIKOWANE KOMENTARZE - Szklane kafelki */
+.gsc-comment {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
