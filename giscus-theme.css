@@ -1,0 +1,41 @@
+/*! Custom Glassmorphism Theme for MR Blog */
+main {
+  /* Znikające tło (przezroczystość) */
+  --color-canvas-default: transparent; 
+  --color-canvas-subtle: rgba(255, 255, 255, 0.4); 
+  
+  /* Szklane ramki */
+  --color-border-default: rgba(255, 255, 255, 0.6);
+  --color-border-muted: rgba(255, 255, 255, 0.3);
+  
+  /* Kolory tekstu dopasowane do Twojego bloga */
+  --color-fg-default: #1d1d1f; 
+  --color-fg-muted: #86868b; 
+  
+  /* Zmiana zielonego na Twój akcentowy niebieski */
+  --color-accent-fg: #0071e3;
+  --color-accent-emphasis: #0071e3;
+  --color-accent-muted: rgba(0, 113, 227, 0.1);
+  --color-border-primary: #0071e3;
+  
+  /* Stylowanie przycisków */
+  --color-btn-text: #1d1d1f;
+  --color-btn-bg: rgba(255, 255, 255, 0.6);
+  --color-btn-hover-bg: #ffffff;
+  
+  /* Główny przycisk (np. Logowanie) */
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #0071e3;
+  --color-btn-primary-hover-bg: #005bb5;
+}
+
+/* Zaokrąglenie pola tekstowego */
+.gsc-comment-box {
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Zaokrąglenie komentarzy */
+.gsc-comment {
+  border-radius: 20px !important;
+}
