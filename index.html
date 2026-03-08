@@ -182,15 +182,17 @@
         @media (max-width: 600px) {
             .creative-gallery { grid-template-columns: 1fr; } /* Na telefonie 1 pod drugim */
         }
-		/* Naprawa paska nawigacji TYLKO na komputerach (żeby nie łamał się na dwie linie) */
+/* Naprawa paska nawigacji TYLKO na komputerach (zwiększona grubość) */
         @media (min-width: 769px) {
             nav {
                 display: flex;
                 align-items: center;
                 white-space: nowrap;
+                padding: 6px 15px; /* To dodaje paskowi głównej objętości (oś Y i X) */
             }
             nav a {
-                padding: 12px 15px; /* Minimalnie mniejsze odstępy, żeby wszystko ładnie się zmieściło */
+                padding: 14px 20px; /* Zwiększa pionowy i poziomy margines samych przycisków */
+                font-size: 0.95rem; /* Tyci większa czcionka, żeby proporcjonalnie pasowała do grubszego paska */
             }
         }
     </style>
@@ -621,6 +623,7 @@
 </body>
 
 </html>
+
 
 
 
