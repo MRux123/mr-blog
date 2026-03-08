@@ -29,7 +29,7 @@
         section { min-height: 100vh; padding: 120px 20px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; background: linear-gradient(135deg, #1d1d1f, #434345); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;}
         
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; margin-top: 40px;}
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; }
         
         .glass-card {
             background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%); -webkit-backdrop-filter: blur(40px) saturate(150%);
@@ -40,21 +40,30 @@
         .tag { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 10px; }
         .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2;}
         .card-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+        
+        /* Select Sortowania */
+        .sort-container { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 30px; margin-top: 20px; }
+        .sort-select { padding: 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
+        .sort-select:hover { background: white; }
     </style>
 </head>
 <body>
-    <div class="ambient-bg">
-        <div class="blob blob1"></div>
-        <div class="blob blob2"></div>
-    </div>
+    <div class="ambient-bg"><div class="blob blob1"></div><div class="blob blob2"></div></div>
 
     <nav>
-        <a href="index.html#culture" onclick="triggerHaptic()">&larr; Back to Home</a>
+        <a href="index.html" onclick="triggerHaptic()">&larr; Back to Home</a>
     </nav>
 
     <section>
-        <h1 class="section-title">Culture & Economy Archive</h1>
+        <h1 class="section-title">Culture & Economy</h1>
         <p style="color: var(--text-muted); text-align: center;">All my previous analytical voices and global reflections.</p>
+
+        <div class="sort-container">
+            <select id="sort-select" class="sort-select" onchange="renderGrid()">
+                <option value="asc">Chronologicznie (A-Z)</option>
+                <option value="desc">Najnowsze wpierw (Z-A)</option>
+            </select>
+        </div>
 
         <div class="grid-3" id="dynamic-grid">
             <p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">Loading database...</p>
@@ -62,7 +71,41 @@
     </section>
 
     <script>
+        let allPosts = []; // Tu przechowujemy pobraną bazę
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
+
+        function renderGrid() {
+            const grid = document.getElementById('dynamic-grid');
+            const sortOrder = document.getElementById('sort-select').value;
+            grid.innerHTML = ''; 
+            
+            if(!allPosts || allPosts.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No articles yet. Add them in the Admin Panel.</p>';
+                return;
+            }
+
+            // Magia Sortowania: asc (A-Z, od najstarszego), desc (Z-A, od najnowszego)
+            const sortedPosts = allPosts.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+
+            sortedPosts.forEach((post, index) => {
+                const dateObj = new Date(post.date);
+                const monthYear = dateObj.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+                
+                const cardHTML = `
+                    <div class="glass-card" style="animation-delay: ${(index * 0.1).toFixed(1)}s;" onclick="window.location.href='article.html?id=${post.slug}'">
+                        <span class="tag">${monthYear}</span>
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-text">${post.excerpt || 'Read the full analysis to learn more...'}</p>
+                        <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
 
         fetch('baza-artykulow.json')
             .then(response => {
@@ -70,35 +113,13 @@
                 return response.json();
             })
             .then(data => {
-                const grid = document.getElementById('dynamic-grid');
-                grid.innerHTML = ''; 
-                
-                if(!data.posts || data.posts.length === 0) {
-                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No articles yet. Add them in the Admin Panel.</p>';
-                    return;
-                }
-
-                    const sortedPosts = data.posts.sort((a, b) => new Date(a.date) - new Date(b.date));
-                sortedPosts.forEach((post, index) => {
-                    const dateObj = new Date(post.date);
-                    const monthYear = dateObj.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
-                    
-                    const cardHTML = `
-                        <div class="glass-card" style="animation-delay: ${(index * 0.1).toFixed(1)}s;" onclick="window.location.href='article.html?id=${post.slug}'">
-                            <span class="tag">${monthYear}</span>
-                            <h3 class="card-title">${post.title}</h3>
-                            <p class="card-text">${post.excerpt || 'Read the full analysis to learn more...'}</p>
-                            <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
-                        </div>
-                    `;
-                    grid.innerHTML += cardHTML;
-                });
+                allPosts = data.posts || [];
+                renderGrid(); // Pierwsze rysowanie kart domyślnie od A-Z
             })
             .catch(error => {
-                console.error('Error loading database:', error);
-                document.getElementById('dynamic-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ff4444;">Database generating... Please wait a minute or add a post in the Admin Panel.</p>';
+                console.error('Error:', error);
+                document.getElementById('dynamic-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ff4444;">Database generating... Please wait.</p>';
             });
     </script>
 </body>
 </html>
-
