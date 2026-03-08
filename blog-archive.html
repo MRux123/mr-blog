@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archive | MR Blog</title>
+    <title>Personal Blog | MR Blog</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg-color: #f5f5f7; --text-main: #1d1d1f; --text-muted: #86868b; --accent: #0071e3; --glass-bg: rgba(255, 255, 255, 0.45); --glass-border: rgba(255, 255, 255, 0.6); --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08); }
@@ -41,9 +41,9 @@
         .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2;}
         .card-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
         
-        /* Select Sortowania */
+        /* Select Sortowania - Poprawiony right padding */
         .sort-container { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 30px; margin-top: 20px; }
-        .sort-select { padding: 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
+        .sort-select { padding: 10px 40px 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
         .sort-select:hover { background: white; }
     </style>
 </head>
@@ -55,13 +55,15 @@
     </nav>
 
     <section>
-        <h1 class="section-title">My Personal Blog</h1>
-        <p style="color: var(--text-muted); text-align: center;">All my previous analytical voices and global reflections.</p>
+        <h1 class="section-title">Personal Blog Archive</h1>
+        <p style="color: var(--text-muted); text-align: center;">A private collection of my journal entries and reflections.</p>
 
         <div class="sort-container">
             <select id="sort-select" class="sort-select" onchange="renderGrid()">
-                <option value="asc">Chronologicznie (A-Z)</option>
-                <option value="desc">Najnowsze wpierw (Z-A)</option>
+                <option value="asc">Oldest first (A-Z)</option>
+                <option value="desc">Newest first (Z-A)</option>
+            </with_p: option value="asc">Oldest first (A-Z)</option>
+                <option value="desc">Newest first (Z-A)</option>
             </select>
         </div>
 
@@ -71,7 +73,7 @@
     </section>
 
     <script>
-        let allPosts = []; // Tu przechowujemy pobraną bazę
+        let allPosts = []; 
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
 
         function renderGrid() {
@@ -80,11 +82,10 @@
             grid.innerHTML = ''; 
             
             if(!allPosts || allPosts.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No articles yet. Add them in the Admin Panel.</p>';
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No blog entries yet. Go write something!</p>';
                 return;
             }
 
-            // Magia Sortowania: asc (A-Z, od najstarszego), desc (Z-A, od najnowszego)
             const sortedPosts = allPosts.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -99,22 +100,22 @@
                     <div class="glass-card" style="animation-delay: ${(index * 0.1).toFixed(1)}s;" onclick="window.location.href='article.html?id=${post.slug}'">
                         <span class="tag">${monthYear}</span>
                         <h3 class="card-title">${post.title}</h3>
-                        <p class="card-text">${post.excerpt || 'Read the full analysis to learn more...'}</p>
-                        <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+                        <p class="card-text">${post.excerpt || 'Read the full analytical voice...'}</p>
+                        <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read more &rarr;</span>
                     </div>
                 `;
                 grid.innerHTML += cardHTML;
             });
         }
 
-        fetch('baza-blog.json')
+        fetch('baza-blog.json') // <--- Ta baza jest inna!
             .then(response => {
-                if(!response.ok) throw new Error("Database not found");
+                if(!response.ok) throw new Error("Blog database not found");
                 return response.json();
             })
             .then(data => {
                 allPosts = data.posts || [];
-                renderGrid(); // Pierwsze rysowanie kart domyślnie od A-Z
+                renderGrid(); 
             })
             .catch(error => {
                 console.error('Error:', error);
