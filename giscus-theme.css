@@ -1,41 +1,65 @@
-/*! Custom Glassmorphism Theme for MR Blog */
+/*! Custom Glassmorphism Theme for MR Blog v2 */
 main {
-  /* Znikające tło (przezroczystość) */
-  --color-canvas-default: transparent; 
-  --color-canvas-subtle: rgba(255, 255, 255, 0.4); 
+  --color-canvas-default: transparent;
+  --color-canvas-subtle: transparent;
   
-  /* Szklane ramki */
   --color-border-default: rgba(255, 255, 255, 0.6);
   --color-border-muted: rgba(255, 255, 255, 0.3);
   
-  /* Kolory tekstu dopasowane do Twojego bloga */
-  --color-fg-default: #1d1d1f; 
-  --color-fg-muted: #86868b; 
+  /* Wymuszenie CIEMNEGO tekstu */
+  --color-fg-default: #1d1d1f !important;
+  --color-fg-muted: #86868b !important;
+  --color-fg-subtle: #86868b !important;
   
-  /* Zmiana zielonego na Twój akcentowy niebieski */
+  /* Zamiana ZIELONEGO przycisku GitHuba na Twój Błękitny */
   --color-accent-fg: #0071e3;
   --color-accent-emphasis: #0071e3;
-  --color-accent-muted: rgba(0, 113, 227, 0.1);
-  --color-border-primary: #0071e3;
-  
-  /* Stylowanie przycisków */
+  --color-success-emphasis: #0071e3 !important; 
+  --color-success-fg: #0071e3 !important;
+
   --color-btn-text: #1d1d1f;
   --color-btn-bg: rgba(255, 255, 255, 0.6);
   --color-btn-hover-bg: #ffffff;
-  
-  /* Główny przycisk (np. Logowanie) */
-  --color-btn-primary-text: #ffffff;
-  --color-btn-primary-bg: #0071e3;
-  --color-btn-primary-hover-bg: #005bb5;
+  --color-btn-primary-bg: #0071e3 !important;
 }
 
-/* Zaokrąglenie pola tekstowego */
+/* CAŁE PUDŁO DO PISANIA - Szklana karta */
 .gsc-comment-box {
-  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(40px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden;
+}
+
+/* ZAKŁADKI WRITE / PREVIEW - Efekt "Liquid Glass" z paska menu */
+.gsc-comment-box-tabs {
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(40px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+  padding: 10px 15px !important;
+  border-radius: 24px 24px 0 0 !important;
+}
+
+/* Środek wpisywania tekstu */
+.gsc-comment-box-textarea {
+  color: #1d1d1f !important;
+}
+
+/* OPUBLIKOWANE KOMENTARZE - Zgodne z kafelkami na stronie */
+.gsc-comment {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(40px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 24px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Zaokrąglenie komentarzy */
-.gsc-comment {
-  border-radius: 20px !important;
+/* Naprawa białego/niewidzialnego tekstu w nagłówkach Giscusa */
+.gsc-header, .gsc-comments-count {
+  color: #1d1d1f !important;
 }
