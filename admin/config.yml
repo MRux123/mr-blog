@@ -10,7 +10,7 @@ public_folder: "/images"
 
 collections:
   - name: "database"
-    label: "Baza Danych"
+    label: "Newsy (Culture)"
     files:
       - label: "Wszystkie Artykuły"
         name: "articles"
@@ -26,4 +26,23 @@ collections:
               - {label: "Data publikacji", name: "date", widget: "datetime"}
               - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
               - {label: "Treść artykułu", name: "body", widget: "markdown"}
+              - {label: "Zdjęcie na dole (opcjonalne)", name: "bottom_image", widget: "image", required: false}
 
+  - name: "blog_database"
+    label: "Blog Osobisty"
+    files:
+      - label: "Wpisy na Bloga"
+        name: "blog_posts"
+        file: "baza-blog.json"
+        fields:
+          - label: "Wpisy"
+            name: "posts"
+            widget: "list"
+            fields:
+              - {label: "Tytuł", name: "title", widget: "string"}
+              - {label: "Link (bez spacji, np. moj-pierwszy-wpis)", name: "slug", widget: "string"}
+              - {label: "Zajawka na kafelek", name: "excerpt", widget: "text"}
+              - {label: "Data publikacji", name: "date", widget: "datetime"}
+              - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
+              - {label: "Treść wpisu", name: "body", widget: "markdown"}
+              - {label: "Zdjęcie na dole (opcjonalne)", name: "bottom_image", widget: "image", required: false}
