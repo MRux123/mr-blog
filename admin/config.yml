@@ -6,14 +6,20 @@ media_folder: "images"
 public_folder: "/images"
 
 collections:
-  - name: "articles"
-    label: "Wpisy (Archiwum)"
-    folder: "posts"
-    create: true
-    slug: "{{slug}}"
-    format: "json"
-    fields:
-      - {label: "Tytuł", name: "title", widget: "string"}
-      - {label: "Data publikacji", name: "date", widget: "datetime"}
-      - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
-      - {label: "Treść", name: "body", widget: "markdown"}
+  - name: "database"
+    label: "Baza Danych"
+    files:
+      - label: "Wszystkie Artykuły"
+        name: "articles"
+        file: "baza-artykulow.json"
+        fields:
+          - label: "Wpisy"
+            name: "posts"
+            widget: "list"
+            fields:
+              - {label: "Tytuł", name: "title", widget: "string"}
+              - {label: "Link (bez spacji, np. luty-2026)", name: "slug", widget: "string"}
+              - {label: "Zajawka na kafelek", name: "excerpt", widget: "text"}
+              - {label: "Data publikacji", name: "date", widget: "datetime"}
+              - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
+              - {label: "Treść artykułu", name: "body", widget: "markdown"}
