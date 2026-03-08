@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive | MR Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #f5f5f7; --text-main: #1d1d1f; --text-muted: #86868b; --accent: #0071e3; --glass-bg: rgba(255, 255, 255, 0.45); --glass-border: rgba(255, 255, 255, 0.6); --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: float 25s infinite alternate ease-in-out; }
+        .blob1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #d8b4fe; }
+        .blob2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #93c5fd; animation-delay: -5s; }
+        @keyframes float { 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        nav a { display: block; padding: 12px 24px; text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.95rem; transition: 0.3s; white-space: nowrap; }
+        nav a:hover { color: var(--accent); background: rgba(0, 113, 227, 0.05); border-radius: 50px;}
+
+        section { min-height: 100vh; padding: 120px 20px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; background: linear-gradient(135deg, #1d1d1f, #434345); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;}
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; }
+        
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%); -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border); border-radius: 32px; padding: 40px; box-shadow: var(--glass-shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease; cursor: pointer; display: flex; flex-direction: column;
+        }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
+        .tag { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 10px; }
+        .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2;}
+        .card-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+        
+        /* Select Sortowania */
+        .sort-container { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 30px; margin-top: 20px; }
+        .sort-select { padding: 10px 18px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(20px); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: 0.3s; }
+        .sort-select:hover { background: white; }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"><div class="blob blob1"></div><div class="blob blob2"></div></div>
+
+    <nav>
+        <a href="index.html" onclick="triggerHaptic()">&larr; Back to Home</a>
+    </nav>
+
+    <section>
+        <h1 class="section-title">My Personal Blog</h1>
+        <p style="color: var(--text-muted); text-align: center;">All my previous analytical voices and global reflections.</p>
+
+        <div class="sort-container">
+            <select id="sort-select" class="sort-select" onchange="renderGrid()">
+                <option value="asc">Chronologicznie (A-Z)</option>
+                <option value="desc">Najnowsze wpierw (Z-A)</option>
+            </select>
+        </div>
+
+        <div class="grid-3" id="dynamic-grid">
+            <p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">Loading database...</p>
+        </div>
+    </section>
+
+    <script>
+        let allPosts = []; // Tu przechowujemy pobraną bazę
+        function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
+
+        function renderGrid() {
+            const grid = document.getElementById('dynamic-grid');
+            const sortOrder = document.getElementById('sort-select').value;
+            grid.innerHTML = ''; 
+            
+            if(!allPosts || allPosts.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No articles yet. Add them in the Admin Panel.</p>';
+                return;
+            }
+
+            // Magia Sortowania: asc (A-Z, od najstarszego), desc (Z-A, od najnowszego)
+            const sortedPosts = allPosts.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+
+            sortedPosts.forEach((post, index) => {
+                const dateObj = new Date(post.date);
+                const monthYear = dateObj.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+                
+                const cardHTML = `
+                    <div class="glass-card" style="animation-delay: ${(index * 0.1).toFixed(1)}s;" onclick="window.location.href='article.html?id=${post.slug}'">
+                        <span class="tag">${monthYear}</span>
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-text">${post.excerpt || 'Read the full analysis to learn more...'}</p>
+                        <span style="color: var(--accent); font-weight: 600; margin-top: auto; font-size: 0.95rem;">Read full analysis &rarr;</span>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        fetch('baza-blog.json')
+            .then(response => {
+                if(!response.ok) throw new Error("Database not found");
+                return response.json();
+            })
+            .then(data => {
+                allPosts = data.posts || [];
+                renderGrid(); // Pierwsze rysowanie kart domyślnie od A-Z
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('dynamic-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ff4444;">Database generating... Please wait.</p>';
+            });
+    </script>
+</body>
+</html>
