@@ -574,32 +574,40 @@
         const authBtn = document.getElementById('auth-btn');
         
         if (window.netlifyIdentity) {
-            // Jeśli użytkownik jest już zalogowany, zmień tekst przycisku
+            // Przy załadowaniu strony - jeśli jest user, zmień tekst
             netlifyIdentity.on('init', user => {
                 if (user) authBtn.innerText = "Admin Panel";
             });
-            // Po zalogowaniu w okienku -> od razu przenieś do panelu
+            
+            // Zdarzenie login (np. przy logowaniu lub odświeżaniu sesji)
             netlifyIdentity.on('login', user => {
-                window.location.href = "/admin/";
+                authBtn.innerText = "Admin Panel";
+                netlifyIdentity.close(); // Automatycznie zamyka okienko po zalogowaniu
             });
-            // Po wylogowaniu -> przywróć napis "Log in"
+            
+            // Po wylogowaniu przywraca napis
             netlifyIdentity.on('logout', () => {
                 authBtn.innerText = "Log in";
             });
         }
 
+        // To uruchamia się TYLKO po fizycznym kliknięciu w przycisk
         function handleAuth(e) {
             e.preventDefault();
-            triggerHaptic();
+            if (typeof triggerHaptic === 'function') triggerHaptic();
+            
             const user = netlifyIdentity.currentUser();
             if (user) {
-                window.location.href = "/admin/"; // Jeśli zalogowany, wchodzi do bazy
+                // Jeśli jesteś już zalogowany, przenosi Cię do panelu
+                window.location.href = "/admin/"; 
             } else {
-                netlifyIdentity.open(); // Jeśli niezalogowany, otwiera okienko Netlify
+                // Jeśli nie jesteś, wysuwa okienko logowania
+                netlifyIdentity.open(); 
             }
         }
     </script>
 </body>
 
 </html>
+
 
