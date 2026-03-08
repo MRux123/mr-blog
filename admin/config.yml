@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: MRux123/mr-blog
   branch: main
+  base_url: https://rukszan.com
+  auth_endpoint: blog/admin/auth.php
 
 media_folder: "images"
 public_folder: "/images"
@@ -23,3 +26,4 @@ collections:
               - {label: "Data publikacji", name: "date", widget: "datetime"}
               - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
               - {label: "Treść artykułu", name: "body", widget: "markdown"}
+
