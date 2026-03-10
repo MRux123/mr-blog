@@ -65,13 +65,109 @@
 
         nav a { text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.9rem; padding: 10px 18px; border-radius: 50px; position: relative; z-index: 2; transition: color 0.3s; }
         
-        .nav-bubble {
-            position: absolute; top: 6px; left: 0; height: calc(100% - 12px);
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%);
-            border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 6px 15px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,1);
-            border-radius: 50px; z-index: 1; opacity: 0; pointer-events: none;
-            transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1.1), width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1.1), opacity 0.3s ease;
-        }
+/* ================================================================
+   LIQUID GLASS NAV BUBBLE — Apple WWDC25 quality
+   
+   INSTRUKCJA: Zastąp CAŁY blok .nav-bubble { ... } tym kodem.
+   Dodaj też @keyframes na dole bloku <style>.
+   ================================================================ */
+
+.nav-bubble {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    height: calc(100% - 8px);
+    border-radius: 50px;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    will-change: left, width, opacity;
+
+    /* Smooth spring — trochę dłuższy dla bardziej "płynnego" odczucia */
+    transition:
+        left    0.55s cubic-bezier(0.34, 1.56, 0.64, 1.1),
+        width   0.45s cubic-bezier(0.34, 1.56, 0.64, 1.1),
+        opacity 0.25s ease;
+
+    /* ── CORE GLASS: backdrop blur + nasycenie ─────────────────── */
+    backdrop-filter: blur(20px) saturate(220%) brightness(1.06);
+    -webkit-backdrop-filter: blur(20px) saturate(220%) brightness(1.06);
+
+    /* ── WARSTWY SZKŁA:
+       1. Kopułowy odblask górny  (symuluje wypukłą soczewkę)
+       2. Dolne wewnętrzne odbicie
+       3. Tło samej szyby                                         */
+    background:
+        radial-gradient(ellipse 80% 55% at 50% -5%,
+            rgba(255,255,255,0.90) 0%,
+            rgba(255,255,255,0.00) 65%),
+        radial-gradient(ellipse 55% 40% at 50% 115%,
+            rgba(255,255,255,0.35) 0%,
+            transparent 70%),
+        linear-gradient(170deg,
+            rgba(255,255,255,0.42) 0%,
+            rgba(255,255,255,0.13) 45%,
+            rgba(255,255,255,0.25) 100%);
+
+    /* ── ŚWIETLNA OBWÓDKA (rim lighting) ──────────────────────── */
+    box-shadow:
+        /* Górna krawędź: jasna linia spekularna — najważniejsza! */
+        inset 0  1.5px 0 0.5px rgba(255,255,255,1.00),
+        inset 0  3px   6px    rgba(255,255,255,0.55),
+        /* Dolna krawędź: ciemniejsze odbicie */
+        inset 0 -1px   0      rgba(255,255,255,0.30),
+        /* Boczne krawędzie */
+        inset  1px 0   0      rgba(255,255,255,0.50),
+        inset -1px 0   0      rgba(255,255,255,0.40),
+        /* Zewnętrzna poświata */
+        0 0 0 0.75px rgba(255,255,255,0.30),
+        /* Cień głębi */
+        0 4px 22px rgba(0,0,0,0.09),
+        0 1px  5px rgba(0,0,0,0.06);
+}
+
+/* ── KAUSTYCZNY BLASK: smuga światła przesuwająca się przez szkło */
+.nav-bubble::before {
+    content: '';
+    position: absolute;
+    top: -10%; bottom: -10%;
+    left: -130%;
+    width: 75%;
+    background: linear-gradient(
+        108deg,
+        transparent            0%,
+        rgba(255,255,255,0)   25%,
+        rgba(255,255,255,0.55) 47%,
+        rgba(255,255,255,0.65) 50%,
+        rgba(255,255,255,0.55) 53%,
+        rgba(255,255,255,0)   75%,
+        transparent           100%
+    );
+    transform: skewX(-12deg);
+    animation: liquidSweep 5.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    pointer-events: none;
+}
+
+/* ── IRYZACJA: subtelna tęczowa dyspersja na krawędziach szkła ── */
+.nav-bubble::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: 48px;
+    background: linear-gradient(
+        135deg,
+        rgba(130, 195, 255, 0.18)  0%,
+        rgba(190, 130, 255, 0.13) 25%,
+        transparent               48%,
+        transparent               52%,
+        rgba(255, 190, 120, 0.11) 75%,
+        rgba(120, 255, 195, 0.16) 100%
+    );
+    animation: iridShift 9s ease-in-out infinite alternate;
+    pointer-events: none;
+    opacity: 0.8;
+}
 
             @media (max-width: 850px) {
             .hamburger-btn { display: flex; }
@@ -202,6 +298,41 @@
                 font-size: 0.95rem; 
             }
         }
+		/* ── KEYFRAMES ─────────────────────────────────────────────────── */
+@keyframes liquidSweep {
+    0%          { left: -130%; opacity: 0; }
+    4%          { opacity: 0; }
+    12%         { opacity: 1; }
+    42%         { left: 160%;  opacity: 0.75; }
+    48%, 100%   { left: 160%;  opacity: 0; }
+}
+
+@keyframes iridShift {
+    0% {
+        background: linear-gradient(135deg,
+            rgba(130,195,255,0.18)  0%,
+            rgba(190,130,255,0.13) 25%,
+            transparent            50%,
+            rgba(255,190,120,0.11) 75%,
+            rgba(120,255,195,0.16) 100%);
+    }
+    50% {
+        background: linear-gradient(135deg,
+            rgba(255,200,130,0.14)  0%,
+            rgba(130,255,190,0.11) 25%,
+            transparent            50%,
+            rgba(190,130,255,0.13) 75%,
+            rgba(130,195,255,0.18) 100%);
+    }
+    100% {
+        background: linear-gradient(135deg,
+            rgba(190,255,140,0.13)  0%,
+            rgba(130,195,255,0.18) 25%,
+            transparent            50%,
+            rgba(255,130,190,0.10) 75%,
+            rgba(210,190,255,0.14) 100%);
+    }
+}
     </style>
 </head>
 <body>
@@ -1169,6 +1300,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </body>
 
 </html>
+
 
 
 
