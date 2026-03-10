@@ -92,3 +92,27 @@ svg { color: #1d1d1f !important; }
   transform: translateY(-3px) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
 }
+/* --- USUNIĘCIE CZARNYCH RAMEK WOKÓŁ KOMENTARZY --- */
+
+/* Nadpisanie głównych zmiennych kolorystycznych ramek Giscusa */
+main {
+    --color-border-default: transparent !important;
+    --color-border-muted: transparent !important;
+}
+
+/* Bezpośrednie usunięcie obramowania z głównego kontenera komentarza */
+.timeline-comment,
+.timeline-comment-group,
+.giscus-comment {
+    border: none !important;
+    /* Dodajemy bardzo delikatny, jasny cień, żeby komentarz nie zlał się całkowicie z tłem */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important; 
+    border-radius: 20px !important;
+}
+
+/* Usunięcie obramowania wokół pola tekstowego (odpowiadania) */
+.form-control,
+.comment-form {
+    border: none !important;
+    box-shadow: none !important;
+}
