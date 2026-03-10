@@ -1137,11 +1137,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const today = new Date();
     const dailySeed = (today.getFullYear() * 10000) + ((today.getMonth() + 1) * 100) + today.getDate();
 
-    // 3. Wybór 3 słów z bazy na podstawie seedu (rotacja)
+// 3. Wybór 3 CAŁKOWICIE NOWYCH słów z bazy każdego dnia (rotacja pakietowa)
     const totalWords = vocabularyDB.length;
-    const index1 = dailySeed % totalWords;
-    const index2 = (dailySeed + 1) % totalWords;
-    const index3 = (dailySeed + 2) % totalWords;
+    
+    // Mnożymy seed przez 3, aby każdego dnia przeskakiwać o równe 3 pozycje
+    const baseIndex = (dailySeed * 3) % totalWords; 
+    
+    const index1 = baseIndex;
+    const index2 = (baseIndex + 1) % totalWords;
+    const index3 = (baseIndex + 2) % totalWords;
 
     const wordsOfTheDay = [ vocabularyDB[index1], vocabularyDB[index2], vocabularyDB[index3] ];
 
@@ -1165,6 +1169,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </body>
 
 </html>
+
 
 
 
