@@ -63,15 +63,57 @@
             /* Zwróć uwagę, że zniknęły stąd te głupie flexy i overflowy, które psuły telefon */
         }
 
-        nav a { text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.9rem; padding: 10px 18px; border-radius: 50px; position: relative; z-index: 2; transition: color 0.3s; }
-        
-        .nav-bubble {
-            position: absolute; top: 6px; left: 0; height: calc(100% - 12px);
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%);
-            border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 6px 15px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,1);
-            border-radius: 50px; z-index: 1; opacity: 0; pointer-events: none;
-            transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1.1), width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1.1), opacity 0.3s ease;
-        }
+/* --- LIQUID GLASS MENU --- */
+nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.2); /* Bardzo przezroczyste tło bazy */
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border-radius: 50px;
+    z-index: 1000; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex; /* Żeby elementy układały się w rzędzie */
+    position: relative; /* Ważne dla pozycjonowania kropli */
+    overflow: hidden; /* Zatrzymuje szkło wewnątrz pigułki */
+}
+
+/* KROPLA SZKŁA PODĄŻAJĄCA ZA KURSOROM */
+.nav-bubble {
+    position: absolute;
+    top: 5px; /* Odstęp od góry menu */
+    bottom: 5px; /* Odstęp od dołu menu */
+    left: 0;
+    width: 0;
+    background: rgba(255, 255, 255, 0.5); /* Mleczne szkło */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.8), 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 40px;
+    z-index: -1; /* Musi być POD tekstem linków */
+    opacity: 0; /* Domyślnie niewidoczna */
+    /* Fizyka cieczy - elastyczne, gumowe przejście */
+    transition: all 0.5s cubic-bezier(0.25, 1.2, 0.5, 1); 
+    pointer-events: none; /* Żeby myszka klikała w linki, a nie w bąbel */
+}
+
+nav a { 
+    display: block; 
+    padding: 12px 24px; 
+    text-decoration: none; 
+    color: #1d1d1f; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+    transition: color 0.3s; 
+    white-space: nowrap; 
+    position: relative;
+    z-index: 1; /* Tekst musi być nad kroplą */
+}
+
+nav a:hover { 
+    color: #0071e3; /* Zmiana koloru tekstu po najechaniu */
+    background: transparent; /* Usuwamy stare, statyczne tło! */
+}
 
             @media (max-width: 850px) {
             .hamburger-btn { display: flex; }
@@ -386,23 +428,8 @@
 
     <script>
         // --- 1. HAPTYKA ---
-        function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(100); }
-
-        // --- 2. BĄBELEK W MENU ---
-        const nav = document.getElementById('main-nav');
-        const bubble = document.querySelector('.nav-bubble');
-        const links = nav.querySelectorAll('a');
-
-        links.forEach(link => {
-            link.addEventListener('mouseenter', function() {
-                if(window.innerWidth > 850) { 
-                    bubble.style.width = `${this.offsetWidth}px`;
-                    bubble.style.left = `${this.offsetLeft}px`;
-                    bubble.style.opacity = '1';
-                }
-            });
-        });
-        nav.addEventListener('mouseleave', () => { bubble.style.opacity = '0'; });
+        function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(30); }
+		}
 
         // --- 3. MENU MOBILNE & SWIPE ---
         function toggleMenu() { document.body.classList.toggle('menu-open'); triggerHaptic(); }
@@ -1166,9 +1193,39 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+	<script>
+    // SILNIK LIQUID GLASS DO MENU
+    document.addEventListener("DOMContentLoaded", () => {
+        const nav = document.querySelector('nav');
+        const bubble = document.querySelector('.nav-bubble');
+        const links = document.querySelectorAll('nav a');
+
+        // Kiedy myszka wjeżdża na jakikolwiek link w menu
+        links.forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                // Obliczamy szerokość i pozycję najechanego linku
+                const rect = e.target.getBoundingClientRect();
+                const navRect = nav.getBoundingClientRect();
+                
+                // Aktualizujemy szklaną kroplę
+                bubble.style.width = `${rect.width}px`;
+                bubble.style.left = `${rect.left - navRect.left}px`;
+                bubble.style.opacity = '1'; // Pokazujemy kroplę
+                bubble.style.transform = 'scale(1)';
+            });
+        });
+
+        // Kiedy myszka opuszcza całe menu - kropla znika
+        nav.addEventListener('mouseleave', () => {
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'scale(0.8)'; // Lekko się kurczy przy znikaniu
+        });
+    });
+</script>
 </body>
 
 </html>
+
 
 
 
