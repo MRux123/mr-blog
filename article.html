@@ -10,7 +10,10 @@
     <style>
         :root { --bg-color: #f5f5f7; --text-main: #1d1d1f; --text-muted: #86868b; --accent: #0071e3; --glass-bg: rgba(255, 255, 255, 0.45); --glass-border: rgba(255, 255, 255, 0.6); --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* TWARDA BLOKADA OSI X DLA STRONY */
+        html, body { max-width: 100vw; overflow-x: hidden !important; }
+        body { background-color: var(--bg-color); color: var(--text-main); scroll-behavior: smooth; }
 
         .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; }
         .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: float 25s infinite alternate ease-in-out; }
@@ -43,20 +46,14 @@
         
         .action-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
         .action-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 10px 18px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: var(--text-main); transition: 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        .action-btn:hover {
-            background-color: transparent !important;
-            color: #0071e3 !important; 
-            border: 1px solid rgba(0, 113, 227, 0.2);
-            box-shadow: none;
-        }
-        .action-btn:hover svg {
-            stroke: #0071e3 !important;
-        }
+        .action-btn:hover { background-color: transparent !important; color: #0071e3 !important; border: 1px solid rgba(0, 113, 227, 0.2); box-shadow: none; }
+        .action-btn:hover svg { stroke: #0071e3 !important; }
 
         .glass-container { background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%); -webkit-backdrop-filter: blur(40px) saturate(150%); border: 1px solid var(--glass-border); border-radius: 32px; padding: 50px; box-shadow: var(--glass-shadow); }
         
-        /* NOWE STYLE DLA MARKDOWNA (Tekst, Nagłówki, Listy, Pogrubienia) */
-        .article-content p { font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 25px; }
+        /* WYMUSZENIE ŁAMANIA TEKSTU I NOWE STYLE MARKDOWN */
+        .article-content { word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; }
+        .article-content p { font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 25px; word-wrap: break-word; }
         .article-content h2 { font-size: 2.2rem; font-weight: 800; margin: 50px 0 20px 0; color: var(--text-main); letter-spacing: -0.02em; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .article-content h3 { font-size: 1.6rem; font-weight: 700; margin: 35px 0 15px 0; color: var(--accent); letter-spacing: -0.01em; }
         .article-content ul { margin-bottom: 30px; padding-left: 20px; list-style-type: none; }
@@ -161,7 +158,10 @@
                     document.getElementById('post-author').innerText = "By " + (post.author || "Michał Rukszan");
                     document.getElementById('post-date').innerText = "Published: " + dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
-                    let articleContent = marked.parse(post.body || "");
+                    // Inteligentne pobieranie treści z bazy (sprawdza różne nazwy z Decap CMS)
+                    const rawText = post.body || post.content || post.text || "";
+                    let articleContent = marked.parse(rawText);
+                    
                     if (post.bottom_image) articleContent += `<img src="${post.bottom_image}" alt="Galeria wpisu" class="bottom-article-image">`;
                     document.getElementById('post-body').innerHTML = articleContent;
                 } else {
