@@ -1,0 +1,30 @@
+/*! Giscus V2 - Perfect Glass */
+main {
+  --color-canvas-default: transparent !important;
+  --color-canvas-subtle: rgba(255, 255, 255, 0.4) !important;
+  --color-fg-default: #1d1d1f !important; 
+  --color-fg-muted: #555555 !important;
+  --color-border-default: rgba(255, 255, 255, 0.8) !important;
+  --color-border-muted: rgba(255, 255, 255, 0.5) !important;
+  --color-accent-fg: #0071e3 !important;
+  --color-btn-text: #1d1d1f !important;
+  --color-btn-bg: rgba(255, 255, 255, 0.6) !important;
+}
+
+body, .gsc-header, .gsc-comments-count, .gsc-comment-author, p, div, span {
+    color: #1d1d1f !important; 
+}
+
+.gsc-comment-box, .gsc-comment {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 24px !important; 
+  color: #1d1d1f !important;
+}
+
+.gsc-comment-box-textarea {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: #1d1d1f !important;
+}
