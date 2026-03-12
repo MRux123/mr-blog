@@ -1,219 +1,72 @@
+/*! Perfect Liquid Glass Theme for MR Blog */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-:root {
-    --color-canvas-default:         #ffffff;
-    --color-canvas-subtle:          #f0f4ff;
-    --color-canvas-inset:           #e8eeff;
-    --color-border-default:         #c5d0e8;
-    --color-border-muted:           #d8e0f0;
-    --color-fg-default:             #0a0a0f;
-    --color-fg-muted:               #3a4060;
-    --color-fg-subtle:              #6670a0;
-    --color-accent-fg:              #0071e3;
-    --color-accent-emphasis:        #0071e3;
-    --color-accent-subtle:          rgba(0,113,227,0.10);
-    --color-btn-bg:                 #ffffff;
-    --color-btn-border:             #c5d0e8;
-    --color-btn-hover-bg:           #eef2ff;
-    --color-btn-primary-bg:         #1d1d1f;
-    --color-btn-primary-border:     #1d1d1f;
-    --color-btn-primary-hover-bg:   #3a3a3c;
-    --color-btn-primary-text:       #ffffff;
-    --color-neutral-muted:          rgba(0,0,0,0.06);
-    --color-header-bg:              #e8eeff;
-    --color-input-bg:               #ffffff;
-    --color-input-border:           #c5d0e8;
+/* Główna mapa kolorów Giscusa - dopasowana do czytelnego szkła */
+main {
+  --color-canvas-default: transparent !important; /* Tło pod komentarzami znika (widać tło strony) */
+  --color-canvas-subtle: rgba(255, 255, 255, 0.4) !important;
+  
+  --color-fg-default: #1d1d1f !important; /* Wymuszenie czarnego, czytelnego tekstu */
+  --color-fg-muted: #555555 !important;
+  
+  --color-border-default: rgba(255, 255, 255, 0.8) !important;
+  --color-border-muted: rgba(255, 255, 255, 0.5) !important;
+  
+  --color-accent-fg: #0071e3 !important;
+  
+  --color-btn-text: #1d1d1f !important;
+  --color-btn-bg: rgba(255, 255, 255, 0.6) !important;
+  --color-btn-hover-bg: rgba(255, 255, 255, 0.9) !important;
 }
 
+/* Wymuszenie czytelności tekstu w CAŁYM Giscusie (Nawet jak zmienne zawiodą) */
+.gsc-header, .gsc-comments-count, .gsc-comment-author, .gsc-comment-content, .gsc-reply-button, .gsc-tab-button, span, p, div {
+    color: #1d1d1f !important;
+}
+
+/* KLUCZOWE: Usunięcie tła z body wewnątrz iframe Giscusa */
 body {
-    background: #7b9fd4 !important;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    color: #0a0a0f !important;
-    padding: 6px !important;
-    margin: 0 !important;
+    background: transparent !important; 
+    font-family: 'Inter', sans-serif !important;
 }
 
-.gsc-main { background: transparent !important; }
-
-/* Karty komentarzy — białe na niebieskim tle */
-.gsc-comment,
-.gsc-reply {
-    background: #ffffff !important;
-    border: 1px solid #c5d0e8 !important;
-    border-radius: 18px !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
-    overflow: hidden !important;
-    transition: transform 0.25s, box-shadow 0.25s !important;
-    margin-bottom: 12px !important;
-}
-
-.gsc-comment:hover,
-.gsc-reply:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.16) !important;
-}
-
-.gsc-comment-header,
-.gsc-reply-header {
-    background: #f5f8ff !important;
-    border-bottom: 1px solid #dde5f5 !important;
-    padding: 12px 18px !important;
-    color: #0a0a0f !important;
-}
-
-.gsc-comment-content,
-.gsc-reply-content {
-    background: #ffffff !important;
-    padding: 14px 18px !important;
-    color: #0a0a0f !important;
-}
-
-.gsc-comment-content p,
-.gsc-reply-content p,
-.gsc-comment-content *,
-.gsc-reply-content * {
-    color: #0a0a0f !important;
-}
-
-.gsc-comment-footer,
-.gsc-reply-footer {
-    background: #f0f4ff !important;
-    border-top: 1px solid #dde5f5 !important;
-    padding: 8px 18px !important;
-}
-
-/* Pole do pisania */
+/* --- KARTA WPISYWANIA KOMENTARZA --- */
 .gsc-comment-box {
-    background: #ffffff !important;
-    border: 1px solid #c5d0e8 !important;
-    border-radius: 18px !important;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.10) !important;
-    overflow: hidden !important;
-    margin-bottom: 16px !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 24px !important; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
 }
 
+/* Zakładki Write/Preview */
 .gsc-comment-box-tabs {
-    background: #eef2ff !important;
-    border-bottom: 1px solid #d0d8f0 !important;
-    padding: 8px 12px 0 !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
-.gsc-comment-box-tab-link {
-    color: #3a4060 !important;
-    font-weight: 600 !important;
-    font-size: 0.85rem !important;
-    border-radius: 8px 8px 0 0 !important;
-    padding: 6px 14px !important;
+/* Pole tekstowe (Matowe szkło) */
+.gsc-comment-box-textarea {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: #1d1d1f !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
 }
 
-.gsc-comment-box-tab-link.selected {
-    background: #ffffff !important;
-    color: #0a0a0f !important;
-    border: 1px solid #d0d8f0 !important;
-    border-bottom: 1px solid #ffffff !important;
+/* --- OPUBLIKOWANE KOMENTARZE --- */
+.gsc-comment {
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04) !important;
+  margin-bottom: 15px !important;
 }
 
-.gsc-comment-box-textarea,
-.gsc-comment-box-preview {
-    background: #ffffff !important;
-    border: none !important;
-    color: #0a0a0f !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.95rem !important;
-    padding: 14px 16px !important;
-    resize: vertical !important;
-    min-height: 100px !important;
+/* Ukrycie domyślnych ramek oddzielających nagłówek od treści w komentarzu */
+.gsc-comment-header {
+    border-bottom: none !important;
 }
-
-.gsc-comment-box-textarea::placeholder { color: #6670a0 !important; }
-.gsc-comment-box-textarea:focus { outline: none !important; background: #fafcff !important; }
-
-.gsc-comment-box-bottom {
-    background: #eef2ff !important;
-    border-top: 1px solid #d0d8f0 !important;
-    padding: 10px 14px !important;
-}
-
-/* Tekst ogólny */
-.color-fg-default, span, p, div, h1, h2, h3, h4, h5, h6, li, td, th, label {
-    color: #0a0a0f !important;
-}
-
-.color-fg-muted { color: #3a4060 !important; }
-
-/* Przyciski */
-.btn {
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-    padding: 7px 16px !important;
-    transition: all 0.2s !important;
-    font-family: 'Inter', sans-serif !important;
-}
-
-.btn-primary {
-    background: #1d1d1f !important;
-    border: 1px solid #1d1d1f !important;
-    color: #ffffff !important;
-}
-
-.btn-primary:hover {
-    background: #3a3a3c !important;
-    transform: translateY(-1px) !important;
-}
-
-.btn:not(.btn-primary) {
-    background: #ffffff !important;
-    border: 1px solid #c5d0e8 !important;
-    color: #0a0a0f !important;
-}
-
-.btn:not(.btn-primary):hover {
-    background: #eef2ff !important;
-}
-
-/* Login */
-.gsc-login { text-align: center !important; padding: 20px !important; }
-
-.gsc-login-button {
-    background: #1d1d1f !important;
-    color: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 10px 24px !important;
-    font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    border: none !important;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.22) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-}
-
-.gsc-login-button:hover { background: #3a3a3c !important; }
-
-/* Reakcje */
-button.gsc-social-reaction-summary-item {
-    background: #ffffff !important;
-    border: 1px solid #c5d0e8 !important;
-    border-radius: 20px !important;
-    padding: 3px 10px !important;
-    transition: all 0.2s !important;
-}
-
-button.gsc-social-reaction-summary-item:hover { background: #eef2ff !important; }
-button.gsc-social-reaction-summary-item.has-reacted {
-    background: rgba(0,113,227,0.10) !important;
-    border-color: rgba(0,113,227,0.35) !important;
-}
-
-/* Avatary */
-.gsc-comment-author-avatar img,
-.gsc-reply-author-avatar img {
-    border-radius: 50% !important;
-    border: 2px solid #ffffff !important;
-}
-
-a { color: #0071e3 !important; text-decoration: none !important; }
-a:hover { text-decoration: underline !important; }
-
-.gsc-powered-by { color: #6670a0 !important; font-size: 0.78rem !important; opacity: 0.7 !important; margin-top: 12px !important; }
