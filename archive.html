@@ -89,22 +89,7 @@
         .card-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
         .read-more { color: var(--accent); font-weight: 600; font-size: 0.95rem; margin-top: auto; }
 
-        /* MODAL */
-        #post-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            z-index: 2000; overflow-y: auto;
-            opacity: 0; pointer-events: none; transition: 0.4s ease;
-            display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px;
-        }
-        #post-modal.active { opacity: 1; pointer-events: all; }
-        .modal-content {
-            background: white; width: 100%; max-width: 850px;
-            padding: 50px; border-radius: 24px; box-shadow: 0 40px 100px rgba(0,0,0,0.2);
-            position: relative; transform: translateY(30px) scale(0.98); transition: 0.4s ease;
-        }
-        #post-modal.active .modal-content { transform: translateY(0) scale(1); }
-        .close-modal { position: absolute; top: 20px; right: 30px; font-size: 2rem; cursor: pointer; color: var(--text-muted); }
+
 
         .reveal { opacity: 0; transform: translateY(50px) scale(0.95); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
@@ -137,14 +122,7 @@
         </div>
     </section>
 
-    <div id="post-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closePost()">&times;</span>
-            <span id="modal-tag" class="tag" style="margin-bottom: 15px;">Date</span>
-            <h2 id="modal-title" style="font-size: 2.2rem; margin-bottom: 20px; font-weight: 800; letter-spacing: -0.03em;">Title</h2>
-            <p id="modal-body" style="font-size: 1.1rem; line-height: 1.8; color: #444;">Body content...</p>
-        </div>
-    </div>
+
 
     <script>
         let allPosts = [];
@@ -175,10 +153,9 @@
                 const safeTitle   = (post.title   || '').replace(/</g, '&lt;');
                 const safeExcerpt = (post.excerpt || '').replace(/</g, '&lt;');
 
-                // onclick przekazuje tylko INDEKS — treść pobieramy z tablicy, nie z HTML-a
                 grid.innerHTML += `
                     <div class="glass-card reveal" style="animation-delay: ${(index * 0.1).toFixed(1)}s"
-                         onclick="openPost(${index})">
+                         onclick="window.location.href='article.html?id=${post.slug}'">
                         <span class="tag">${dateLabel}</span>
                         <h3 class="card-title">${safeTitle}</h3>
                         <p class="card-text">${safeExcerpt || 'Click to read the full entry...'}</p>
@@ -200,46 +177,7 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Modal — otwiera przez indeks, nie przez inline HTML
-        const modal = document.getElementById('post-modal');
-        function openPost(index) {
-            const post = sortedPosts[index];
-            if (!post) return;
 
-            const dateLabel = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            document.getElementById('modal-title').innerText = post.title || '';
-            document.getElementById('modal-tag').innerText   = dateLabel;
-
-            // Renderuj markdown jeśli jest, w przeciwnym razie zwykły tekst
-            const bodyEl = document.getElementById('modal-body');
-            const rawBody = post.body || post.excerpt || '';
-            bodyEl.innerHTML = markdownToHtml(rawBody);
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Prosty konwerter markdown → HTML (nagłówki, bold, italic, listy, akapity)
-        function markdownToHtml(md) {
-            return md
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // escape HTML
-                .replace(/^### (.+)$/gm, '<h3 style="font-size:1.1rem;font-weight:700;margin:16px 0 8px">$1</h3>')
-                .replace(/^## (.+)$/gm,  '<h2 style="font-size:1.3rem;font-weight:700;margin:20px 0 10px">$1</h2>')
-                .replace(/^# (.+)$/gm,   '<h1 style="font-size:1.5rem;font-weight:800;margin:24px 0 12px">$1</h1>')
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.+?)\*/g,     '<em>$1</em>')
-                .replace(/^- (.+)$/gm, '<li style="margin-left:20px;margin-bottom:4px">$1</li>')
-                .replace(/(<li.*<\/li>\n?)+/g, s => `<ul style="margin:10px 0">${s}</ul>`)
-                .replace(/\n\n+/g, '</p><p style="margin-bottom:12px">')
-                .replace(/^(?!<[hul])(.+)$/gm, (m) => m.trim() ? m : '')
-                .replace(/^(.)/m, '<p style="margin-bottom:12px">$1')
-                + '</p>';
-        }
-        function closePost() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-        modal.addEventListener('click', e => { if (e.target === modal) closePost(); });
 
         // Fetch z baza-blog.json
         fetch('baza-blog.json')
