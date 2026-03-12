@@ -6,7 +6,7 @@ backend:
   auth_endpoint: blog/admin/auth.php
 
 media_folder: "images"
-public_folder: "/images"
+public_folder: "/blog/images"
 
 collections:
   - name: "database"
@@ -46,3 +46,4 @@ collections:
               - {label: "Autor", name: "author", widget: "string", default: "Michał Rukszan"}
               - {label: "Treść wpisu", name: "body", widget: "markdown"}
               - {label: "Zdjęcie na dole (opcjonalne)", name: "bottom_image", widget: "image", required: false}
+
