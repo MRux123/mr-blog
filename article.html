@@ -143,9 +143,11 @@
         if (!postId) {
             document.getElementById('post-body').innerHTML = "Error: No article ID provided in the link.";
         } else {
+// Dodajemy znacznik czasu (Cache Buster), żeby wymusić pobranie świeżej bazy!
+            const noCache = new Date().getTime();
             Promise.all([
-                fetch('baza-artykulow.json').then(res => res.ok ? res.json() : { posts: [] }),
-                fetch('baza-blog.json').then(res => res.ok ? res.json() : { posts: [] })
+                fetch(`baza-artykulow.json?v=${noCache}`).then(res => res.ok ? res.json() : { posts: [] }),
+                fetch(`baza-blog.json?v=${noCache}`).then(res => res.ok ? res.json() : { posts: [] })
             ])
             .then(([newsData, blogData]) => {
                 const allPosts = [...(newsData.posts || []), ...(blogData.posts || [])];
