@@ -1317,7 +1317,7 @@ function buildPreviewCards(posts, gridSelector, linkLabel, archiveUrl) {
 
         grid.innerHTML += `
             <div class="glass-card reveal" style="cursor:pointer; display:flex; flex-direction:column; animation-delay:${i * 0.1}s"
-                 onclick="openPost(${JSON.stringify(safeTitle)}, ${JSON.stringify(date)}, ${JSON.stringify(safeExcerpt)})">
+                 onclick="window.location.href='article.html?id=${post.slug}'"
                 <span class="tag">${date}</span>
                 <h3 class="card-title">${safeTitle}</h3>
                 <p class="card-text">${safeExcerpt}</p>
@@ -1344,6 +1344,7 @@ fetch('baza-artykulow.json')
 </body>
 
 </html>
+
 
 
 
