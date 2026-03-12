@@ -16,15 +16,26 @@
         .blob2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #93c5fd; animation-delay: -5s; }
         @keyframes float { 100% { transform: translate(50px, 50px) scale(1.1); } }
 
+        /* NAV — identyczny glass hover jak przycisk sortowania */
         nav {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: var(--glass-bg); backdrop-filter: blur(40px) saturate(150%);
             -webkit-backdrop-filter: blur(40px) saturate(150%);
             border: 1px solid var(--glass-border); border-radius: 50px;
             z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
         }
-        nav a { display: block; padding: 12px 24px; text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.95rem; transition: 0.3s; white-space: nowrap; }
-        nav a:hover { color: var(--accent); background: rgba(0, 113, 227, 0.05); border-radius: 50px;}
+        nav a {
+            display: block; padding: 12px 24px;
+            text-decoration: none; color: var(--text-main);
+            font-weight: 600; font-size: 0.95rem;
+            white-space: nowrap;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        nav a:hover {
+            color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.70);
+        }
 
         section { min-height: 100vh; padding: 120px 20px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; background: linear-gradient(135deg, #1d1d1f, #434345); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;}
@@ -41,23 +52,19 @@
         .card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; line-height: 1.2;}
         .card-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
         
-/* Select Sortowania - Własna strzałka i efekt Hover */
+        /* SORTOWANIE */
         .sort-container { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 30px; margin-top: 20px; }
-        
         .sort-select { 
-            appearance: none; -webkit-appearance: none; -moz-appearance: none; /* Ukrywa domyślną brzydką strzałkę */
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
             padding: 10px 45px 10px 20px; border-radius: 50px; border: 1px solid var(--glass-border); 
             background-color: var(--glass-bg); backdrop-filter: blur(20px); 
             font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--text-main); 
             cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: all 0.3s ease;
-            /* Nasza własna, precyzyjnie ustawiona strzałka (czarna) */
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231d1d1f%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat; background-position: right 18px top 50%; background-size: 10px auto;
         }
-        
         .sort-select:hover { 
-            color: var(--accent); background-color: rgba(0, 113, 227, 0.05); border-color: rgba(0, 113, 227, 0.2);
-            /* Zmiana koloru naszej strzałki na błękitny przy najechaniu */
+            color: var(--accent); background-color: rgba(255, 255, 255, 0.70); border-color: rgba(0, 113, 227, 0.2);
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230071e3%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
         }
     </style>
@@ -99,7 +106,7 @@
                 return;
             }
 
-            const sortedPosts = allPosts.sort((a, b) => {
+            const sortedPosts = [...allPosts].sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
                 return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
@@ -137,4 +144,3 @@
     </script>
 </body>
 </html>
-
