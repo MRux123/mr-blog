@@ -566,7 +566,7 @@
                 if (href.startsWith('#')) {
                     e.preventDefault();
                     const target = document.getElementById(href.substring(1));
-                    if (target) window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+                    if (target) window.scrollTo({ top: target.offsetTop - 130, behavior: 'smooth' });
                 }
             });
         });
@@ -1315,10 +1315,9 @@ function buildPreviewCards(posts, gridSelector, linkLabel, archiveUrl) {
         const safeTitle   = (post.title   || '').replace(/</g, '&lt;');
         const safeExcerpt = (post.excerpt || '').replace(/</g, '&lt;');
 
-        grid.innerHTML += `
+    grid.innerHTML += `
             <div class="glass-card reveal" style="cursor:pointer; display:flex; flex-direction:column; animation-delay:${i * 0.1}s"
-                 onclick="window.location.href='article.html?id=${post.slug}'"
-                <span class="tag">${date}</span>
+                 onclick="window.location.href='article.html?id=${post.slug}'"> <span class="tag">${date}</span>
                 <h3 class="card-title">${safeTitle}</h3>
                 <p class="card-text">${safeExcerpt}</p>
                 <span style="color:var(--accent); font-weight:600; margin-top:auto;">${linkLabel} &rarr;</span>
@@ -1329,14 +1328,14 @@ function buildPreviewCards(posts, gridSelector, linkLabel, archiveUrl) {
     document.querySelectorAll('.reveal:not(.active)').forEach(el => observer.observe(el));
 }
 
-// Blog (Journal)
-fetch('baza-blog.json')
+// Blog (Journal) - Cache buster wymusza pobranie najnowszych kafelków
+fetch('baza-blog.json?v=' + new Date().getTime())
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => buildPreviewCards(data.posts || [], '#journal .grid-2', 'Read Full Post', 'archive.html'))
-    .catch(() => {}); // zostaw hardkodowane karty jeśli brak pliku
+    .catch(() => {}); 
 
-// Culture
-fetch('baza-artykulow.json')
+// Culture - Cache buster wymusza pobranie najnowszych kafelków
+fetch('baza-artykulow.json?v=' + new Date().getTime())
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => buildPreviewCards(data.posts || [], '#culture .grid-2', 'Read Full Analysis', 'culture-archive.html'))
     .catch(() => {});
@@ -1344,6 +1343,7 @@ fetch('baza-artykulow.json')
 </body>
 
 </html>
+
 
 
 
