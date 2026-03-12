@@ -146,6 +146,12 @@
             </script>
         </div>
     </article>
+<div id="lightbox">
+    <span class="close-lightbox">&times;</span>
+    <img id="lightbox-img" src="" alt="Zoomed Image">
+    <div id="lightbox-caption"></div>
+    <a id="mobile-download-btn" href="" download>Download Photo</a>
+</div>
 
     <script>
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
@@ -303,11 +309,5 @@ lightboxImg.addEventListener('touchstart', (e) => {
 lightboxImg.addEventListener('touchend', () => clearTimeout(pressTimer));
 lightboxImg.addEventListener('touchmove', () => clearTimeout(pressTimer));
     </script>
-    <div id="lightbox">
-    <span class="close-lightbox">&times;</span>
-    <img id="lightbox-img" src="" alt="Zoomed Image">
-    <div id="lightbox-caption"></div>
-    <a id="mobile-download-btn" href="" download>Download Photo</a>
-</div>
 </body>
 </html>
