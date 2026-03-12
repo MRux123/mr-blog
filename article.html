@@ -221,6 +221,68 @@
                 });
             }
         });
+        // --- ZAAWANSOWANY LIGHTBOX (Powiększanie i Panning) ---
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+const downloadBtn = document.getElementById('mobile-download-btn');
+let isZoomed = false; let pressTimer;
+
+function openLightbox(imgElement) {
+    if (typeof triggerHaptic === 'function') triggerHaptic();
+    isZoomed = false; lightboxImg.style.transform = 'scale(1)';
+    lightboxImg.src = imgElement.src;
+    lightboxCaption.innerText = imgElement.getAttribute('data-caption') || '';
+    lightbox.classList.add('active'); document.body.style.overflow = 'hidden';
+}
+
+lightbox.addEventListener('click', function(e) {
+    if(e.target === downloadBtn) return;
+    downloadBtn.classList.remove('active');
+
+    if(e.target === lightboxImg) {
+        if(!isZoomed) {
+            isZoomed = true; if (typeof triggerHaptic === 'function') triggerHaptic();
+            lightboxImg.style.transform = 'scale(2.5)';
+            if(window.innerWidth > 800) {
+                const rect = lightboxImg.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+            } else { lightboxImg.style.transformOrigin = `center center`; }
+        } else {
+            isZoomed = false; lightboxImg.style.transform = 'scale(1)';
+        }
+        return;
+    }
+    if(e.target === lightbox || e.target.className === 'close-lightbox') {
+        if (typeof triggerHaptic === 'function') triggerHaptic();
+        lightbox.classList.remove('active'); document.body.style.overflow = 'auto';
+        isZoomed = false; lightboxImg.style.transform = 'scale(1)';
+    }
+});
+
+lightbox.addEventListener('mousemove', (e) => {
+    if(isZoomed && window.innerWidth > 800) {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+    }
+});
+
+lightboxImg.addEventListener('touchstart', (e) => {
+    pressTimer = setTimeout(() => {
+        if (typeof triggerHaptic === 'function') triggerHaptic();
+        const touch = e.touches[0];
+        downloadBtn.href = lightboxImg.src;
+        let filename = lightboxImg.src.split('/').pop().split('?')[0] || 'photo.jpg';
+        downloadBtn.setAttribute('download', filename);
+        downloadBtn.style.left = `${touch.clientX + 20}px`; downloadBtn.style.top = `${touch.clientY - 20}px`;
+        downloadBtn.classList.add('active');
+    }, 600);
+}, {passive: true});
+lightboxImg.addEventListener('touchend', () => clearTimeout(pressTimer));
+lightboxImg.addEventListener('touchmove', () => clearTimeout(pressTimer));
     </script>
     <div id="lightbox">
     <span class="close-lightbox">&times;</span>
