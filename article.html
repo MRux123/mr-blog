@@ -188,13 +188,24 @@
                     
                     if (post.bottom_image) articleContent += `<img src="${post.bottom_image}" alt="Galeria wpisu" class="bottom-article-image">`;
                     document.getElementById('post-body').innerHTML = articleContent;
-                    // --- NOWA MAGIA: Automatyczny aktywator Lightboxa ---
-                    // Szukamy wszystkich zdjęć wewnątrz artykułu
-                    const articleImages = document.querySelectorAll('#post-body img');
-                    articleImages.forEach(img => {
-                        img.classList.add('zoomable'); // Dodaje ładny kursor, cienie i zaokrąglenia
-                        img.onclick = function() { openLightbox(this); }; // Podpina powiększanie!
+// --- NIEZNISZCZALNY AKTYWATOR ZDJĘĆ V2 ---
+                    const postBody = document.getElementById('post-body');
+                    
+                    // 1. Dodajemy klasę CSS, żeby kursor zamieniał się w łapkę
+                    postBody.querySelectorAll('img').forEach(img => {
+                        img.classList.add('zoomable');
                     });
+
+                    // 2. Główny radar na kliknięcia (wyłapie każde zdjęcie, zawsze)
+                    postBody.onclick = function(e) {
+                        if (e.target && e.target.tagName === 'IMG') {
+                            if (typeof openLightbox === 'function') {
+                                openLightbox(e.target);
+                            } else {
+                                alert("Błąd: Funkcja openLightbox nie została znaleziona na dole pliku!");
+                            }
+                        }
+                    };
                     // -----------------------------------------------------
                 } else {
                     document.getElementById('post-body').innerHTML = "Error: Article not found in the database.";
