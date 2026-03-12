@@ -1298,9 +1298,53 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+	<script>
+/* ── DYNAMICZNE ŁADOWANIE 2 NAJNOWSZYCH WPISÓW NA STRONĘ GŁÓWNĄ ── */
+
+function buildPreviewCards(posts, gridSelector, linkLabel, archiveUrl) {
+    const grid = document.querySelector(gridSelector);
+    if (!grid || !posts.length) return;
+
+    const newest = [...posts]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 2);
+
+    grid.innerHTML = '';
+    newest.forEach((post, i) => {
+        const date = new Date(post.date).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+        const safeTitle   = (post.title   || '').replace(/</g, '&lt;');
+        const safeExcerpt = (post.excerpt || '').replace(/</g, '&lt;');
+
+        grid.innerHTML += `
+            <div class="glass-card reveal" style="cursor:pointer; display:flex; flex-direction:column; animation-delay:${i * 0.1}s"
+                 onclick="openPost(${JSON.stringify(safeTitle)}, ${JSON.stringify(date)}, ${JSON.stringify(safeExcerpt)})">
+                <span class="tag">${date}</span>
+                <h3 class="card-title">${safeTitle}</h3>
+                <p class="card-text">${safeExcerpt}</p>
+                <span style="color:var(--accent); font-weight:600; margin-top:auto;">${linkLabel} &rarr;</span>
+            </div>`;
+    });
+
+    // Odśwież animacje reveal na nowych kartach
+    document.querySelectorAll('.reveal:not(.active)').forEach(el => observer.observe(el));
+}
+
+// Blog (Journal)
+fetch('baza-blog.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => buildPreviewCards(data.posts || [], '#journal .grid-2', 'Read Full Post', 'archive.html'))
+    .catch(() => {}); // zostaw hardkodowane karty jeśli brak pliku
+
+// Culture
+fetch('baza-artykulow.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => buildPreviewCards(data.posts || [], '#culture .grid-2', 'Read Full Analysis', 'culture-archive.html'))
+    .catch(() => {});
+</script>
 </body>
 
 </html>
+
 
 
 
