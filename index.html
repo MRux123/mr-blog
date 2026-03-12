@@ -29,8 +29,6 @@
             --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
         }
 
-        /* Gwarantuje, że powrót z archiwum nie schowa tytułu pod menu */
-        html { scroll-padding-top: 120px; }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
@@ -566,7 +564,7 @@
                 if (href.startsWith('#')) {
                     e.preventDefault();
                     const target = document.getElementById(href.substring(1));
-                    if (target) window.scrollTo({ top: target.offsetTop - 130, behavior: 'smooth' });
+                    if (target) window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
                 }
             });
         });
@@ -1343,6 +1341,7 @@ fetch('baza-artykulow.json?v=' + new Date().getTime())
 </body>
 
 </html>
+
 
 
 
