@@ -1,251 +1,298 @@
-/*! Giscus Glass — pasuje do designu MR Blog */
+/*
+ * ================================================================
+ *  GISCUS — Liquid Glass Theme
+ *  Pasuje do stylistyki MR Blog (rukszan.com)
+ *
+ *  INSTRUKCJA:
+ *  1. Zastąp zawartość pliku giscus-glass.css w repo tym kodem
+ *  2. W elemencie <script> giscusa ustaw:
+ *     data-theme="https://rukszan.com/blog/giscus-glass.css"
+ *  ================================================================
+ */
 
-/* =========================================================
-   ZMIENNE KOLORYSTYCZNE GISCUSA
-   ========================================================= */
-main {
-  --color-canvas-default: transparent !important;
-  --color-canvas-subtle: rgba(255, 255, 255, 0.55) !important;
+/* ── ZMIENNE ─────────────────────────────────────────────────── */
+:root {
+    --color-canvas-default:           transparent;
+    --color-canvas-subtle:            rgba(255, 255, 255, 0.25);
+    --color-canvas-inset:             rgba(255, 255, 255, 0.15);
 
-  /* Czytelny, ciemny tekst */
-  --color-fg-default: #1d1d1f !important;
-  --color-fg-muted: #444444 !important;
-  --color-fg-subtle: #86868b !important;
+    --color-border-default:           rgba(255, 255, 255, 0.55);
+    --color-border-muted:             rgba(255, 255, 255, 0.30);
 
-  /* Szklane obramowania */
-  --color-border-default: rgba(255, 255, 255, 0.75) !important;
-  --color-border-muted: rgba(255, 255, 255, 0.5) !important;
+    --color-fg-default:               #1d1d1f;
+    --color-fg-muted:                 #86868b;
+    --color-fg-subtle:                #a0a0a5;
 
-  /* Akcenty Apple Blue */
-  --color-accent-fg: #0071e3 !important;
-  --color-accent-emphasis: #0071e3 !important;
+    --color-accent-fg:                #0071e3;
+    --color-accent-emphasis:          #0071e3;
+    --color-accent-subtle:            rgba(0, 113, 227, 0.10);
 
-  /* Przyciski */
-  --color-btn-text: #1d1d1f !important;
-  --color-btn-bg: rgba(255, 255, 255, 0.6) !important;
-  --color-btn-hover-bg: rgba(255, 255, 255, 0.85) !important;
+    --color-btn-bg:                   rgba(255, 255, 255, 0.50);
+    --color-btn-border:               rgba(255, 255, 255, 0.65);
+    --color-btn-hover-bg:             rgba(255, 255, 255, 0.75);
+    --color-btn-primary-bg:           #1d1d1f;
+    --color-btn-primary-border:       #1d1d1f;
+    --color-btn-primary-hover-bg:     #3a3a3c;
+    --color-btn-primary-text:         #ffffff;
 
-  /* Tło pól input */
-  --color-input-bg: rgba(255, 255, 255, 0.7) !important;
+    --color-neutral-muted:            rgba(0, 0, 0, 0.06);
+    --color-header-bg:                transparent;
+    --color-input-bg:                 rgba(255, 255, 255, 0.40);
+    --color-input-border:             rgba(255, 255, 255, 0.60);
 }
 
-/* ── TEKST: wymuszenie czytelności w całym iframe ─────────── */
-.gsc-header, .gsc-comments-count, .gsc-comment-author,
-.gsc-comment-content, .gsc-reply-button, .gsc-tab-button,
-span, p, a, label, textarea, button {
-    color: #1d1d1f !important;
-}
-svg { color: #3a3a3c !important; }
-a { color: #0071e3 !important; }
-
-/* =========================================================
-   1. WRAPPER — karta otaczająca cały Giscus
-   ========================================================= */
-.gsc-main {
-  background: rgba(255, 255, 255, 0.55) !important;
-  backdrop-filter: blur(40px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.80) !important;
-  border-radius: 32px !important;
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9) !important;
-  padding: 30px !important;
+/* ── BODY ─────────────────────────────────────────────────────── */
+body {
+    background: transparent !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--color-fg-default);
 }
 
-/* =========================================================
-   2. KARTA DO PISANIA KOMENTARZY
-   ========================================================= */
-.gsc-comment-box {
-  background: rgba(255, 255, 255, 0.70) !important;
-  backdrop-filter: blur(30px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(150%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  border-radius: 24px !important;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255,255,255,1) !important;
-  transition: transform 0.4s ease, box-shadow 0.4s ease !important;
-  margin-bottom: 20px !important;
-  overflow: hidden !important;
+.gsc-main { background: transparent; }
+
+/* ── KARTY KOMENTARZY — Liquid Glass ────────────────────────── */
+.gsc-comment,
+.gsc-reply {
+    background:
+        radial-gradient(ellipse 80% 55% at 50% -5%,
+            rgba(255,255,255,0.65) 0%,
+            rgba(255,255,255,0.00) 65%),
+        linear-gradient(160deg,
+            rgba(255,255,255,0.50) 0%,
+            rgba(255,255,255,0.18) 50%,
+            rgba(255,255,255,0.30) 100%) !important;
+
+    backdrop-filter: blur(30px) saturate(180%) brightness(1.04) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(1.04) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.60) !important;
+    border-radius: 24px !important;
+
+    box-shadow:
+        inset 0  1.5px 0 0.5px rgba(255,255,255,0.95),
+        inset 0  3px   6px    rgba(255,255,255,0.45),
+        inset 0 -1px   0      rgba(255,255,255,0.25),
+        0 8px 32px rgba(0,0,0,0.07),
+        0 2px  8px rgba(0,0,0,0.04) !important;
+
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease !important;
+    margin-bottom: 16px !important;
 }
 
-.gsc-comment-box:hover {
+.gsc-comment:hover,
+.gsc-reply:hover {
     transform: translateY(-3px) !important;
     box-shadow:
-      0 20px 50px rgba(0, 0, 0, 0.10),
-      inset 0 1px 0 rgba(255,255,255,1) !important;
+        inset 0  1.5px 0 0.5px rgba(255,255,255,0.95),
+        inset 0  3px   6px    rgba(255,255,255,0.45),
+        inset 0 -1px   0      rgba(255,255,255,0.25),
+        0 16px 48px rgba(0,0,0,0.10),
+        0  4px 12px rgba(0,0,0,0.06) !important;
 }
 
-/* Zakładki Write / Preview */
-.gsc-comment-box-tabs {
-  background: rgba(255, 255, 255, 0.40) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
-  border-radius: 24px 24px 0 0 !important;
-  padding: 10px 20px !important;
+/* Górna linia spekularna — identyczna jak w nav-bubble */
+.gsc-comment::before,
+.gsc-reply::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.9) 30%,
+        rgba(255,255,255,1.0) 50%,
+        rgba(255,255,255,0.9) 70%,
+        transparent 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
-.gsc-tab-button {
-  color: #86868b !important;
-  font-weight: 500 !important;
+/* ── NAGŁÓWEK / STOPKA KOMENTARZA ────────────────────────────── */
+.gsc-comment-header,
+.gsc-reply-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255,255,255,0.35) !important;
+    padding: 14px 20px !important;
 }
 
-.gsc-tab-button.gsc-tab-active {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.9) !important;
-    border-radius: 16px !important;
-    font-weight: 700 !important;
-    color: #1d1d1f !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.07) !important;
-}
-
-/* Pole tekstowe */
-.gsc-comment-box-textarea,
-textarea {
-  background: rgba(255, 255, 255, 0.75) !important;
-  color: #1d1d1f !important;
-  font-size: 0.95rem !important;
-  padding: 16px !important;
-  border-radius: 16px !important;
-  border: 1px solid rgba(200, 200, 210, 0.5) !important;
-  margin: 10px !important;
-  width: calc(100% - 20px) !important;
-  transition: border 0.3s ease, box-shadow 0.3s ease !important;
-}
-
-.gsc-comment-box-textarea:focus,
-textarea:focus {
-  border-color: rgba(0, 113, 227, 0.4) !important;
-  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.10) !important;
-  outline: none !important;
-}
-
-/* Placeholder */
-.gsc-comment-box-textarea::placeholder { color: #aaaaaa !important; }
-
-/* =========================================================
-   3. OPUBLIKOWANE KOMENTARZE
-   ========================================================= */
-.gsc-comment {
-  background: rgba(255, 255, 255, 0.65) !important;
-  backdrop-filter: blur(30px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(140%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  border-radius: 24px !important;
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255,255,255,0.9) !important;
-  margin-bottom: 16px !important;
-  padding: 8px !important;
-  transition: transform 0.3s ease !important;
-}
-
-.gsc-comment:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.08) !important;
-}
-
-/* Nagłówek komentarza */
-.gsc-comment-header {
-    border-bottom: 1px solid rgba(0,0,0,0.06) !important;
-    padding-bottom: 10px !important;
-    margin-bottom: 10px !important;
-}
-
-/* Autor */
-.gsc-comment-author {
-  font-weight: 700 !important;
-  color: #1d1d1f !important;
-}
-
-/* Treść komentarza */
 .gsc-comment-content,
-.gsc-comment-content p {
-  color: #333 !important;
-  line-height: 1.7 !important;
+.gsc-reply-content {
+    background: transparent !important;
+    padding: 16px 20px !important;
 }
 
-/* Odpowiedzi — lekko oddzielone */
-.gsc-replies {
-  border-top: 1px solid rgba(0,0,0,0.06) !important;
-  margin-top: 12px !important;
-  padding-top: 12px !important;
+.gsc-comment-footer,
+.gsc-reply-footer {
+    background: rgba(255,255,255,0.10) !important;
+    border-top: 1px solid rgba(255,255,255,0.30) !important;
+    padding: 10px 20px !important;
+    border-radius: 0 0 24px 24px !important;
 }
 
-.gsc-timeline {
-    flex-direction: column !important;
+/* ── POLE DO PISANIA ─────────────────────────────────────────── */
+.gsc-comment-box {
+    background:
+        linear-gradient(160deg,
+            rgba(255,255,255,0.45) 0%,
+            rgba(255,255,255,0.20) 100%) !important;
+    backdrop-filter: blur(25px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(160%) !important;
+    border: 1px solid rgba(255,255,255,0.60) !important;
+    border-radius: 24px !important;
+    box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,0.90),
+        0 8px 24px rgba(0,0,0,0.06) !important;
+    overflow: hidden;
+    margin-bottom: 20px !important;
 }
 
-/* =========================================================
-   4. PRZYCISKI — Liquid Glass
-   ========================================================= */
-button.gsc-button,
-select.gsc-button {
-  background: rgba(255, 255, 255, 0.60) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,1),
-    inset 0 0 12px rgba(255,255,255,0.5),
-    0 4px 15px rgba(0, 0, 0, 0.07) !important;
-  border-radius: 30px !important;
-  padding: 8px 20px !important;
-  font-weight: 600 !important;
-  color: #1d1d1f !important;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+.gsc-comment-box-tabs {
+    background: rgba(255,255,255,0.15) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.40) !important;
+    padding: 8px 12px 0 !important;
 }
 
-button.gsc-button:hover,
-select.gsc-button:hover {
-  background: rgba(255, 255, 255, 0.88) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,1),
-    inset 0 0 20px rgba(255,255,255,0.8),
-    0 8px 25px rgba(0, 0, 0, 0.10) !important;
-  transform: translateY(-2px) scale(1.03) !important;
-  border-color: #ffffff !important;
+.gsc-comment-box-tab-link {
+    color: var(--color-fg-muted) !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 6px 14px !important;
+    transition: background 0.2s, color 0.2s !important;
 }
 
-/* Przycisk "Comment" — wyróżniony */
-.gsc-comment-box-bottom button[type="submit"],
-button.gsc-comment-button {
-  background: #1d1d1f !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-  border-radius: 20px !important;
-  padding: 10px 24px !important;
-  font-weight: 600 !important;
-  transition: all 0.3s ease !important;
+.gsc-comment-box-tab-link.selected {
+    background: rgba(255,255,255,0.60) !important;
+    color: var(--color-fg-default) !important;
+    border: 1px solid rgba(255,255,255,0.70) !important;
+    border-bottom: none !important;
 }
 
-.gsc-comment-box-bottom button[type="submit"]:hover,
-button.gsc-comment-button:hover {
-  background: #0071e3 !important;
-  transform: translateY(-2px) scale(1.03) !important;
-  box-shadow: 0 8px 20px rgba(0,113,227,0.3) !important;
+.gsc-comment-box-textarea,
+.gsc-comment-box-preview {
+    background: rgba(255,255,255,0.20) !important;
+    border: none !important;
+    color: var(--color-fg-default) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.95rem !important;
+    padding: 16px !important;
+    resize: vertical !important;
+    min-height: 100px !important;
 }
 
-/* Przycisk "Sign in" */
-.gsc-social-reaction-summary-item,
-a[href*="github"] {
-  color: #0071e3 !important;
-  font-weight: 600 !important;
+.gsc-comment-box-textarea:focus {
+    outline: none !important;
+    background: rgba(255,255,255,0.30) !important;
 }
 
-/* =========================================================
-   5. LICZNIK REAKCJI / EMOJI
-   ========================================================= */
-.gsc-reactions-count {
-  color: #86868b !important;
-  font-size: 0.85rem !important;
+.gsc-comment-box-textarea::placeholder {
+    color: var(--color-fg-subtle) !important;
 }
 
-/* =========================================================
-   6. "Powered by Giscus" + linki pomocnicze
-   ========================================================= */
-.gsc-footer {
-  opacity: 0.5 !important;
-  font-size: 0.8rem !important;
+/* ── PRZYCISKI ───────────────────────────────────────────────── */
+.btn {
+    border-radius: 14px !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    padding: 8px 18px !important;
+    transition: all 0.25s ease !important;
+}
+
+.btn-primary {
+    background: #1d1d1f !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18) !important;
+}
+
+.btn-primary:hover {
+    background: #3a3a3c !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.22) !important;
+}
+
+.btn:not(.btn-primary) {
+    background: rgba(255,255,255,0.50) !important;
+    border: 1px solid rgba(255,255,255,0.65) !important;
+    color: var(--color-fg-default) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.85),
+        0 2px 6px rgba(0,0,0,0.06) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.btn:not(.btn-primary):hover {
+    background: rgba(255,255,255,0.75) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── LOGOWANIE ───────────────────────────────────────────────── */
+.gsc-login {
+    text-align: center;
+    padding: 20px !important;
+}
+
+.gsc-login-button {
+    background: #1d1d1f !important;
+    color: #fff !important;
+    border-radius: 16px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
+    transition: all 0.25s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.gsc-login-button:hover {
+    background: #3a3a3c !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.22) !important;
+}
+
+/* ── REAKCJE ─────────────────────────────────────────────────── */
+button.gsc-social-reaction-summary-item {
+    background: rgba(255,255,255,0.40) !important;
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 20px !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    transition: all 0.2s ease !important;
+    padding: 3px 10px !important;
+}
+
+button.gsc-social-reaction-summary-item:hover {
+    background: rgba(255,255,255,0.70) !important;
+    transform: scale(1.08) !important;
+}
+
+button.gsc-social-reaction-summary-item.has-reacted {
+    background: rgba(0,113,227,0.12) !important;
+    border-color: rgba(0,113,227,0.35) !important;
+}
+
+/* ── AVATARY ─────────────────────────────────────────────────── */
+.gsc-comment-author-avatar img,
+.gsc-reply-author-avatar img {
+    border-radius: 50% !important;
+    border: 2px solid rgba(255,255,255,0.70) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10) !important;
+}
+
+/* ── LINKI ───────────────────────────────────────────────────── */
+a { color: var(--color-accent-fg) !important; text-decoration: none !important; }
+a:hover { text-decoration: underline !important; }
+
+/* ── POWERED BY ──────────────────────────────────────────────── */
+.gsc-powered-by {
+    color: var(--color-fg-subtle) !important;
+    font-size: 0.78rem !important;
+    opacity: 0.7 !important;
+    margin-top: 16px !important;
 }
