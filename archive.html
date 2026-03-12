@@ -142,12 +142,13 @@
             <span class="close-modal" onclick="closePost()">&times;</span>
             <span id="modal-tag" class="tag" style="margin-bottom: 15px;">Date</span>
             <h2 id="modal-title" style="font-size: 2.2rem; margin-bottom: 20px; font-weight: 800; letter-spacing: -0.03em;">Title</h2>
-            <p id="modal-body" style="font-size: 1.1rem; line-height: 1.8; color: #444; white-space: pre-wrap;">Body content...</p>
+            <p id="modal-body" style="font-size: 1.1rem; line-height: 1.8; color: #444;">Body content...</p>
         </div>
     </div>
 
     <script>
         let allPosts = [];
+        let sortedPosts = []; // globalnie, żeby onclick miał dostęp przez indeks
 
         function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(50); }
 
@@ -161,23 +162,23 @@
                 return;
             }
 
-            const sorted = [...allPosts].sort((a, b) => {
+            sortedPosts = [...allPosts].sort((a, b) => {
                 const da = new Date(a.date), db = new Date(b.date);
                 return sortOrder === 'asc' ? da - db : db - da;
             });
 
-            sorted.forEach((post, index) => {
+            sortedPosts.forEach((post, index) => {
                 const dateObj = new Date(post.date);
                 const dateLabel = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-                // Escapowanie HTML
-                const safeTitle   = post.title?.replace(/</g, '&lt;') ?? '';
-                const safeExcerpt = post.excerpt?.replace(/</g, '&lt;') ?? '';
-                const safeBody    = post.body ?? post.excerpt ?? '';
+                // HTML-safe tylko do wyświetlenia w kartach
+                const safeTitle   = (post.title   || '').replace(/</g, '&lt;');
+                const safeExcerpt = (post.excerpt || '').replace(/</g, '&lt;');
 
+                // onclick przekazuje tylko INDEKS — treść pobieramy z tablicy, nie z HTML-a
                 grid.innerHTML += `
                     <div class="glass-card reveal" style="animation-delay: ${(index * 0.1).toFixed(1)}s"
-                         onclick="openPost(${JSON.stringify(safeTitle)}, ${JSON.stringify(dateLabel)}, ${JSON.stringify(safeBody)})">
+                         onclick="openPost(${index})">
                         <span class="tag">${dateLabel}</span>
                         <h3 class="card-title">${safeTitle}</h3>
                         <p class="card-text">${safeExcerpt || 'Click to read the full entry...'}</p>
@@ -199,14 +200,40 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Modal
+        // Modal — otwiera przez indeks, nie przez inline HTML
         const modal = document.getElementById('post-modal');
-        function openPost(title, tag, body) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-tag').innerText = tag;
-            document.getElementById('modal-body').innerText = body;
+        function openPost(index) {
+            const post = sortedPosts[index];
+            if (!post) return;
+
+            const dateLabel = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('modal-title').innerText = post.title || '';
+            document.getElementById('modal-tag').innerText   = dateLabel;
+
+            // Renderuj markdown jeśli jest, w przeciwnym razie zwykły tekst
+            const bodyEl = document.getElementById('modal-body');
+            const rawBody = post.body || post.excerpt || '';
+            bodyEl.innerHTML = markdownToHtml(rawBody);
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        // Prosty konwerter markdown → HTML (nagłówki, bold, italic, listy, akapity)
+        function markdownToHtml(md) {
+            return md
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // escape HTML
+                .replace(/^### (.+)$/gm, '<h3 style="font-size:1.1rem;font-weight:700;margin:16px 0 8px">$1</h3>')
+                .replace(/^## (.+)$/gm,  '<h2 style="font-size:1.3rem;font-weight:700;margin:20px 0 10px">$1</h2>')
+                .replace(/^# (.+)$/gm,   '<h1 style="font-size:1.5rem;font-weight:800;margin:24px 0 12px">$1</h1>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g,     '<em>$1</em>')
+                .replace(/^- (.+)$/gm, '<li style="margin-left:20px;margin-bottom:4px">$1</li>')
+                .replace(/(<li.*<\/li>\n?)+/g, s => `<ul style="margin:10px 0">${s}</ul>`)
+                .replace(/\n\n+/g, '</p><p style="margin-bottom:12px">')
+                .replace(/^(?!<[hul])(.+)$/gm, (m) => m.trim() ? m : '')
+                .replace(/^(.)/m, '<p style="margin-bottom:12px">$1')
+                + '</p>';
         }
         function closePost() {
             modal.classList.remove('active');
