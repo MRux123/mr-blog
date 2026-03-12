@@ -7,5 +7,34 @@
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+    <script>
+  // Rejestrujemy nowy przycisk "Szklane Zdjęcie"
+  CMS.registerEditorComponent({
+    id: "glass-image",
+    label: "Glass Image (Z podpisem)",
+    fields: [
+      { name: "image", label: "Wybierz Zdjęcie", widget: "image" },
+      { name: "caption", label: "Subtelny Podpis", widget: "string" }
+    ],
+    // Jak to ma wyglądać w surowym pliku (kod Gamechanger)
+    pattern: /^<figure class="glass-figure">.*?src="(.*?)".*?data-caption="(.*?)".*?<\/figure>$/ms,
+    fromBlock: function(match) {
+      return { image: match[1], caption: match[2] };
+    },
+    toBlock: function(obj) {
+      return `
+<figure class="glass-figure" style="margin: 40px 0; text-align: center;">
+    <img src="${obj.image}" class="zoomable" data-caption="${obj.caption}" style="width: 100%; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); cursor: pointer; transition: opacity 0.3s;" onclick="openLightbox(this)" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+    <figcaption style="font-size: 0.85rem; color: #86868b; margin-top: 12px; font-style: italic;">${obj.caption}</figcaption>
+</figure>
+      `.trim();
+    },
+    // Jak to ma wyglądać w podglądzie CMS
+    toPreview: function(obj) {
+      return `<div style="text-align:center"><img src="${obj.image}" style="max-width: 100%; border-radius: 10px;"><br><small style="color:gray">${obj.caption}</small></div>`;
+    }
+  });
+</script>
   </body>
 </html>
+
