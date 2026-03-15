@@ -11,7 +11,7 @@ const parser = new Parser({
   }
 });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro-preview" });
 
 const RSS_FEEDS = [
   "http://feeds.bbci.co.uk/news/world/rss.xml", // BBC
