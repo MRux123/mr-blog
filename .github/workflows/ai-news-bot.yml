@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Pobieranie repozytorium
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # KRYTYCZNE DLA FTP: Pobiera pełną historię, by bot wiedział, co wysłać
 
       - name: Instalacja Node.js
         uses: actions/setup-node@v4
@@ -40,3 +42,11 @@ jobs:
           branch: main
           # Upewnij się, że AI zapisuje w folderze z postami (zgodnie ze skryptem JS)
           file_pattern: 'posts/*.md baza-artykulow.json'
+
+      - name: 📂 Wrzucanie plików na serwer OVH
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /www/blog/
