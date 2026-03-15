@@ -1,0 +1,42 @@
+name: AI News Generator
+
+on:
+  schedule:
+    # Odświeżanie co 3 godziny (np. 0:00, 3:00, 6:00, 9:00 UTC)
+    - cron: '0 */3 * * *'
+  # Pozwala na ręczne odpalenie skryptu z panelu GitHuba (świetne do testów!)
+  workflow_dispatch: 
+
+# Nadanie uprawnień botowi do robienia commitów w Twoim repozytorium
+permissions:
+  contents: write
+
+jobs:
+  generate-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pobieranie repozytorium
+        uses: actions/checkout@v4
+
+      - name: Instalacja Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalacja bibliotek (Gemini & RSS)
+        run: npm install
+
+      - name: Generowanie newsów przez AI 🤖
+        env:
+          # Wyciągamy Twój klucz z bezpiecznego sejfu
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node generate-news.js
+
+      - name: Zapisywanie nowego artykułu (Commit & Push)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🤖 AI: Nowy raport informacyjny ze świata"
+          branch: main
+          # Upewnij się, że AI zapisuje w folderze z postami (zgodnie ze skryptem JS)
+          file_pattern: 'posts/*.md'
