@@ -4,7 +4,7 @@
   "description": "AI News Generator",
   "main": "generate-news.js",
   "dependencies": {
-    "@google/generative-ai": "^0.2.1",
+    "@google/generative-ai": "latest",
     "rss-parser": "^3.13.0"
   }
 }
