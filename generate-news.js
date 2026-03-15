@@ -13,31 +13,34 @@ const parser = new Parser({
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// Lista zaufanych źródeł RSS
 const RSS_FEEDS = [
   "http://feeds.bbci.co.uk/news/world/rss.xml", // BBC
   "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", // NYT
   "https://www.theguardian.com/world/rss", // The Guardian
-  "https://tvn24.pl/najnowsze.xml", // TVN24
-  "https://wyborcza.pl/rss/1,82983.xml", // Wyborcza (Wiadomości)
-  "https://www.polityka.pl/rss/" // Polityka
-  // Uwaga: Reuters wyłączył darmowe publiczne RSS, ale te 6 źródeł to potężna dawka wiedzy!
+  "https://www.rmf24.pl/feed", // RMF24 - przyjazny botom
+  "https://www.polsatnews.pl/rss/wszystkie.xml" // Polsat News
 ];
 
 async function fetchAllNews() {
   let allNews = [];
   for (const url of RSS_FEEDS) {
+    console.log(`[RSS] Próbuję pobrać: ${url}...`);
     try {
-      const feed = await parser.parseURL(url);
-      // Bierzemy tylko 5 najnowszych newsów z każdego portalu, żeby nie zalać AI
+      // Twardy Kill Switch - wyścig między pobieraniem a stoperem (5 sekund)
+      const feed = await Promise.race([
+        parser.parseURL(url),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Serwer nie odpowiada - odcinam!")), 5000))
+      ]);
+      
       const topItems = feed.items.slice(0, 5).map(item => ({
         title: item.title,
         source: feed.title,
         snippet: item.contentSnippet || item.content || ""
       }));
       allNews = allNews.concat(topItems);
+      console.log(`[RSS] SUKCES: Pobrane z ${url}`);
     } catch (error) {
-      console.log(`Błąd pobierania z ${url}:`, error.message);
+      console.log(`[RSS] OMIJAM ${url} - powód: ${error.message}`);
     }
   }
   return allNews;
