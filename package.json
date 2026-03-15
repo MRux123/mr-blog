@@ -1,0 +1,10 @@
+{
+  "name": "mr-blog-ai-bot",
+  "version": "1.0.0",
+  "description": "AI News Generator",
+  "main": "generate-news.js",
+  "dependencies": {
+    "@google/generative-ai": "^0.2.1",
+    "rss-parser": "^3.13.0"
+  }
+}
