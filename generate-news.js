@@ -3,7 +3,13 @@ const Parser = require("rss-parser");
 const fs = require("fs");
 const path = require("path");
 
-const parser = new Parser();
+// Maskujemy bota i ustawiamy 5 sekund limitu czasu na każdą gazetę
+const parser = new Parser({
+  timeout: 5000, 
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+  }
+});
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
