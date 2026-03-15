@@ -186,7 +186,7 @@
                     document.title = post.title + " | MR Blog";
                     document.getElementById('post-title').innerText = post.title;
                     document.getElementById('post-author').innerText = "By " + (post.author || "Michał Rukszan");
-                    document.getElementById('post-date').innerText = "Published: " + dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    document.getElementById('post-date').innerText = "Published: " + dateObj.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     
                     // Inteligentne pobieranie treści z bazy (sprawdza różne nazwy z Decap CMS)
                     const rawText = post.body || post.content || post.text || "";
