@@ -309,5 +309,14 @@ lightboxImg.addEventListener('touchstart', (e) => {
 lightboxImg.addEventListener('touchend', () => clearTimeout(pressTimer));
 lightboxImg.addEventListener('touchmove', () => clearTimeout(pressTimer));
     </script>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('blogrukszan', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#5bc0de',
+    'floating-chat.donateButton.text-color': '#323842'
+  });
+</script>
 </body>
 </html>
