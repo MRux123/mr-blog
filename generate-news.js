@@ -71,7 +71,7 @@ async function generatePost() {
 
     WYMOGI FORMATOWANIA:
     - Na samej górze MUSI być Frontmatter YAML.
-    - Frontmatter musi zawierać: title (krótki, przyciągający uwagę), date (dzisiejsza data w formacie ISO: ${new Date().toISOString()}), category (wpisz "News"), author (wpisz "AI Editor").
+    - Frontmatter musi zawierać: title (krótki, przyciągający uwagę), date (dzisiejsza data w formacie ISO: ${new Date().toISOString()}), category (wpisz "News"), author (wpisz "Michał Rukszan").
     - Użyj ## WORLD i ## POLAND jako głównych nagłówków w tekście.
     - Użyj wypunktowań (bullet points) do opisu poszczególnych newsów.
     
