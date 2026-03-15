@@ -39,4 +39,4 @@ jobs:
           commit_message: "🤖 AI: Nowy raport informacyjny ze świata"
           branch: main
           # Upewnij się, że AI zapisuje w folderze z postami (zgodnie ze skryptem JS)
-          file_pattern: 'posts/*.md'
+         file_pattern: 'posts/*.md baza-artykulow.json'
