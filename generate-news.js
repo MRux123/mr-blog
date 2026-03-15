@@ -3,9 +3,16 @@ const Parser = require("rss-parser");
 const fs = require("fs");
 const path = require("path");
 
+// --- MODUŁ ZDJĘĆ: Uczymy parser wyłapywać zdjęcia z RSS ---
 const parser = new Parser({
   timeout: 5000, 
-  headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' }
+  headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' },
+  customFields: {
+    item: [
+      ['media:content', 'media'],
+      ['media:thumbnail', 'thumbnail']
+    ]
+  }
 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -28,11 +35,24 @@ async function fetchAllNews() {
         parser.parseURL(url),
         new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
       ]);
-      const topItems = feed.items.slice(0, 5).map(item => ({
-        title: item.title,
-        source: feed.title,
-        snippet: item.contentSnippet || item.content || ""
-      }));
+      const topItems = feed.items.slice(0, 5).map(item => {
+        // --- MODUŁ ZDJĘĆ: Szukamy linku do obrazka ---
+        let imgUrl = "";
+        if (item.enclosure && item.enclosure.url && item.enclosure.url.startsWith("http")) {
+          imgUrl = item.enclosure.url;
+        } else if (item.media && item.media.$ && item.media.$.url) {
+          imgUrl = item.media.$.url;
+        } else if (item.thumbnail && item.thumbnail.$ && item.thumbnail.$.url) {
+          imgUrl = item.thumbnail.$.url;
+        }
+
+        return {
+          title: item.title,
+          source: feed.title,
+          snippet: item.contentSnippet || item.content || "",
+          imageUrl: imgUrl // Dodajemy link do paczki dla AI
+        };
+      });
       allNews = allNews.concat(topItems);
       console.log(`[RSS] SUKCES: Pobrane z ${url}`);
     } catch (error) {
@@ -73,8 +93,9 @@ async function generatePost() {
 
   console.log(`Pobrano ${newNews.length} NOWYCH nagłówków (odrzucono ${rawNews.length - newNews.length} powtórek). Wywołuję Gemini AI...`);
 
+  // --- MODUŁ ZDJĘĆ: Aktualizacja promptu ---
   const prompt = `
-    Jesteś profesjonalnym redaktorem naczelnym. Oto lista najświeższych, NIEPUBLIKOWANYCH jeszcze nagłówków ze światowych i polskich mediów (w formacie JSON):
+    Jesteś profesjonalnym redaktorem naczelnym. Oto lista najświeższych, NIEPUBLIKOWANYCH jeszcze nagłówków ze światowych i polskich mediów (w formacie JSON, zawiera też linki do zdjęć "imageUrl"):
     ${JSON.stringify(newNews)}
 
     Twoje zadanie:
@@ -86,6 +107,7 @@ async function generatePost() {
     WYMOGI FORMATOWANIA:
     - Na samej górze MUSI być Frontmatter YAML.
     - Frontmatter musi zawierać: title (krótki, przyciągający uwagę, KONIECZNIE inny niż dotychczasowe!), date (dzisiejsza data w formacie ISO: ${new Date().toISOString()}), category (wpisz "News"), author (wpisz "Michał Rukszan").
+    - DODATKOWO: Zobacz, które z wybranych przez Ciebie wydarzeń ma przypisany link w polu "imageUrl". Skopiuj ten link i dodaj go do Frontmattera jako pole: image (np. image: "https://..."). Jeśli wiadomości nie mają zdjęć, pomiń to pole.
     - Użyj ## WORLD i ## POLAND jako głównych nagłówków w tekście.
     - Użyj wypunktowań (bullet points) do opisu poszczególnych newsów.
     
@@ -101,6 +123,7 @@ async function generatePost() {
     let title = "AI News Update";
     let dateStr = new Date().toISOString();
     let author = "Michał Rukszan";
+    let extractedImage = ""; // Zmienna na zdjęcie
     let cleanBody = markdownContent;
 
     const fmMatch = markdownContent.match(/---\n([\s\S]*?)\n---/);
@@ -110,6 +133,11 @@ async function generatePost() {
       if (titleMatch) title = titleMatch[1];
       const dateMatch = fmText.match(/date:\s*"?([^"\n]+)"?/);
       if (dateMatch) dateStr = dateMatch[1];
+      
+      // --- MODUŁ ZDJĘĆ: Wyłapujemy pole image z YAML-a ---
+      const imageMatch = fmText.match(/image:\s*"?([^"\n]+)"?/);
+      if (imageMatch) extractedImage = imageMatch[1].trim();
+
       // Usuwamy Frontmatter, by zostawić czysty tekst do bazy
       cleanBody = markdownContent.replace(/---\n[\s\S]*?\n---\n*/, '').trim();
     }
@@ -137,12 +165,14 @@ async function generatePost() {
             slug: slug,
             excerpt: excerpt,
             date: dateStr,
+            image: extractedImage,       // Dla Decap CMS
+            bottom_image: extractedImage, // Dla Twojego frontendu (article.html)
             body: cleanBody // baza-artykulow expects markdown body!
         };
         
         db.posts.unshift(newPost); // Dodajemy na sam szczyt bazy
         fs.writeFileSync(jsonPath, JSON.stringify(db, null, 2), 'utf-8');
-        console.log(`Zaktualizowano plik baza-artykulow.json nowym wpisem!`);
+        console.log(`Zaktualizowano plik baza-artykulow.json nowym wpisem! Zdjęcie: ${extractedImage ? 'TAK' : 'BRAK'}`);
     } else {
         console.log(`OSTRZEŻENIE: Nie znaleziono pliku baza-artykulow.json w ${__dirname}`);
     }
