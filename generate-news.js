@@ -10,15 +10,18 @@ const parser = new Parser({
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
   }
 });
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Używamy darmowego, szybkiego modelu
 const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" });
 
+// Lista zaufanych źródeł RSS (omijamy firewalle)
 const RSS_FEEDS = [
-  "http://feeds.bbci.co.uk/news/world/rss.xml", // BBC
-  "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", // NYT
-  "https://www.theguardian.com/world/rss", // The Guardian
-  "https://www.rmf24.pl/feed", // RMF24 - przyjazny botom
-  "https://www.polsatnews.pl/rss/wszystkie.xml" // Polsat News
+  "http://feeds.bbci.co.uk/news/world/rss.xml",
+  "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+  "https://www.theguardian.com/world/rss",
+  "https://www.rmf24.pl/feed",
+  "https://www.polsatnews.pl/rss/wszystkie.xml"
 ];
 
 async function fetchAllNews() {
@@ -26,10 +29,9 @@ async function fetchAllNews() {
   for (const url of RSS_FEEDS) {
     console.log(`[RSS] Próbuję pobrać: ${url}...`);
     try {
-      // Twardy Kill Switch - wyścig między pobieraniem a stoperem (5 sekund)
       const feed = await Promise.race([
         parser.parseURL(url),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Serwer nie odpowiada - odcinam!")), 5000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
       ]);
       
       const topItems = feed.items.slice(0, 5).map(item => ({
@@ -52,7 +54,7 @@ async function generatePost() {
   
   if (rawNews.length === 0) {
     console.log("Brak newsów do przetworzenia. Anuluję.");
-    return;
+    process.exit(0);
   }
 
   console.log(`Pobrano ${rawNews.length} nagłówków. Wywołuję Gemini AI...`);
@@ -80,14 +82,11 @@ async function generatePost() {
     const result = await model.generateContent(prompt);
     let markdownContent = result.response.text();
     
-// Czasami AI dodaje znaczniki ```markdown na początku i końcu. Usuwamy je dla czystości.
     markdownContent = markdownContent.replace(/^```markdown\n/, "").replace(/\n```$/, "");
 
-    // Generowanie nazwy pliku
     const dateObj = new Date();
     const fileName = `${dateObj.toISOString().slice(0, 10)}-ai-news-${dateObj.getHours()}.md`;
     
-    // Zapis do folderu (zakładam, że masz folder 'posts' lub 'news' w repozytorium)
     const dirPath = path.join(__dirname, 'posts');
     if (!fs.existsSync(dirPath)){
         fs.mkdirSync(dirPath);
@@ -96,12 +95,16 @@ async function generatePost() {
     const filePath = path.join(dirPath, fileName);
     fs.writeFileSync(filePath, markdownContent, 'utf-8');
     
-console.log(`SUKCES! Artykuł wygenerowany i zapisany jako: ${fileName}`);
-    process.exit(0); // <--- ZGASZENIE ŚWIATŁA PO SUKCESIE
+    console.log(`SUKCES! Artykuł wygenerowany i zapisany jako: ${fileName}`);
+    
+    // Twarde zamknięcie na sukces!
+    process.exit(0);
 
   } catch (error) {
     console.error("Błąd AI:", error);
-    process.exit(1); // <--- ZGASZENIE ŚWIATŁA PO BŁĘDZIE
+    process.exit(1);
   }
+}
 
+// Start
 generatePost();
