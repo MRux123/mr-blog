@@ -71,8 +71,8 @@ async function generatePost() {
     const result = await model.generateContent(prompt);
     let markdownContent = result.response.text();
     
-    // Czasami AI dodaje znaczniki ```markdown na początku i końcu. Usuwamy je dla czystości.
-    markdownContent = markdownContent.replace(/^```markdown\n/, "").replace/\n```$/, "");
+// Czasami AI dodaje znaczniki ```markdown na początku i końcu. Usuwamy je dla czystości.
+    markdownContent = markdownContent.replace(/^```markdown\n/, "").replace(/\n```$/, "");
 
     // Generowanie nazwy pliku
     const dateObj = new Date();
