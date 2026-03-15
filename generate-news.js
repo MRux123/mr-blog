@@ -51,11 +51,31 @@ async function generatePost() {
     process.exit(0);
   }
 
-  console.log(`Pobrano ${rawNews.length} nagłówków. Wywołuję Gemini AI...`);
+  // --- SYSTEM PAMIĘCI: Wczytanie historii przeczytanych newsów ---
+  const memoryPath = path.join(__dirname, 'seen-news.json');
+  let seenNews = [];
+  if (fs.existsSync(memoryPath)) {
+    try {
+      seenNews = JSON.parse(fs.readFileSync(memoryPath, 'utf-8'));
+    } catch (e) {
+      console.log("Plik pamięci jest pusty lub uszkodzony. Zaczynam od czystej karty.");
+    }
+  }
+
+  // Filtrowanie: Zostawiamy tylko te wiadomości, których bot jeszcze nie widział
+  const newNews = rawNews.filter(item => !seenNews.includes(item.title));
+
+  // Jeśli nie ma przynajmniej 2 nowych wydarzeń, anulujemy akcję, by nie lać wody
+  if (newNews.length < 2) {
+    console.log(`Brak wystarczającej liczby NOWYCH wiadomości (znaleziono tylko ${newNews.length}). Bot idzie spać, żeby nie powielać wpisów.`);
+    process.exit(0);
+  }
+
+  console.log(`Pobrano ${newNews.length} NOWYCH nagłówków (odrzucono ${rawNews.length - newNews.length} powtórek). Wywołuję Gemini AI...`);
 
   const prompt = `
-    Jesteś profesjonalnym redaktorem naczelnym. Oto lista najświeższych nagłówków ze światowych i polskich mediów (w formacie JSON):
-    ${JSON.stringify(rawNews)}
+    Jesteś profesjonalnym redaktorem naczelnym. Oto lista najświeższych, NIEPUBLIKOWANYCH jeszcze nagłówków ze światowych i polskich mediów (w formacie JSON):
+    ${JSON.stringify(newNews)}
 
     Twoje zadanie:
     1. Przeanalizuj te nagłówki.
@@ -65,7 +85,7 @@ async function generatePost() {
 
     WYMOGI FORMATOWANIA:
     - Na samej górze MUSI być Frontmatter YAML.
-    - Frontmatter musi zawierać: title (krótki, przyciągający uwagę), date (dzisiejsza data w formacie ISO: ${new Date().toISOString()}), category (wpisz "News"), author (wpisz "Michał Rukszan").
+    - Frontmatter musi zawierać: title (krótki, przyciągający uwagę, KONIECZNIE inny niż dotychczasowe!), date (dzisiejsza data w formacie ISO: ${new Date().toISOString()}), category (wpisz "News"), author (wpisz "Michał Rukszan").
     - Użyj ## WORLD i ## POLAND jako głównych nagłówków w tekście.
     - Użyj wypunktowań (bullet points) do opisu poszczególnych newsów.
     
@@ -94,7 +114,7 @@ async function generatePost() {
       cleanBody = markdownContent.replace(/---\n[\s\S]*?\n---\n*/, '').trim();
     }
 
-// --- GENEROWANIE DANYCH DLA BAZY ---
+    // --- GENEROWANIE DANYCH DLA BAZY ---
     let excerpt = cleanBody.split('\n').find(line => line.trim().length > 20 && !line.startsWith('#')) || "Daily news summary.";
     
     // Szorstka gąbka: usuwamy gwiazdki, hashe i inne znaczki Markdowna
@@ -134,6 +154,13 @@ async function generatePost() {
     const filePath = path.join(dirPath, fileName);
     fs.writeFileSync(filePath, markdownContent, 'utf-8');
     
+    // --- 3. AKTUALIZACJA PAMIĘCI ---
+    // Zapisujemy tytuły, które bot właśnie przetworzył
+    newNews.forEach(item => seenNews.push(item.title));
+    // Obcinamy tablicę do ostatnich 200 newsów, żeby plik nie rósł w nieskończoność
+    if (seenNews.length > 200) seenNews = seenNews.slice(-200); 
+    fs.writeFileSync(memoryPath, JSON.stringify(seenNews, null, 2), 'utf-8');
+
     console.log(`SUKCES! Artykuł wygenerowany i zapisany jako: ${fileName}`);
     process.exit(0);
 
