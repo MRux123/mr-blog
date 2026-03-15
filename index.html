@@ -492,10 +492,9 @@
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
-        MR blog 2026. All rights reserved.
-		Buy me a coffee☕
-    </footer>
+<footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem;">
+    MR blog 2026. All rights reserved. <a href="https://ko-fi.com/blogrukszan" target="_blank" style="color: inherit; text-decoration: underline; font-weight: 600;">Buy me a coffee ☕</a>
+</footer>
 
     <div id="lightbox">
         <span class="close-lightbox">&times;</span>
@@ -1337,6 +1336,15 @@ fetch('baza-artykulow.json?v=' + new Date().getTime())
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => buildPreviewCards(data.posts || [], '#culture .grid-2', 'Read Full Analysis', 'culture-archive.html'))
     .catch(() => {});
+</script>
+	<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('blogrukszan', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#5bc0de',
+    'floating-chat.donateButton.text-color': '#323842'
+  });
 </script>
 </body>
 
