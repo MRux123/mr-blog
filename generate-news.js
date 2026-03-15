@@ -94,9 +94,12 @@ async function generatePost() {
       cleanBody = markdownContent.replace(/---\n[\s\S]*?\n---\n*/, '').trim();
     }
 
-    // --- GENEROWANIE DANYCH DLA BAZY ---
-    // Szukamy pierwszego akapitu, żeby zrobić zajawkę (excerpt)
+// --- GENEROWANIE DANYCH DLA BAZY ---
     let excerpt = cleanBody.split('\n').find(line => line.trim().length > 20 && !line.startsWith('#')) || "Daily news summary.";
+    
+    // Szorstka gąbka: usuwamy gwiazdki, hashe i inne znaczki Markdowna
+    excerpt = excerpt.replace(/[*_~`#>-]/g, '').trim(); 
+    
     if (excerpt.length > 250) excerpt = excerpt.substring(0, 247) + "...";
 
     const dateObj = new Date();
