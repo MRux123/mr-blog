@@ -96,11 +96,12 @@ async function generatePost() {
     const filePath = path.join(dirPath, fileName);
     fs.writeFileSync(filePath, markdownContent, 'utf-8');
     
-    console.log(`SUKCES! Artykuł wygenerowany i zapisany jako: ${fileName}`);
+console.log(`SUKCES! Artykuł wygenerowany i zapisany jako: ${fileName}`);
+    process.exit(0); // <--- ZGASZENIE ŚWIATŁA PO SUKCESIE
 
   } catch (error) {
     console.error("Błąd AI:", error);
+    process.exit(1); // <--- ZGASZENIE ŚWIATŁA PO BŁĘDZIE
   }
-}
 
 generatePost();
