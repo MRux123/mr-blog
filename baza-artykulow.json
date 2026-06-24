@@ -2,6 +2,16 @@
   "posts": [
     {
       "author": "Michał Rukszan",
+      "title": "Global Rail Disruption and Healthcare Scandal in Warsaw",
+      "slug": "2026-06-24-ai-news-3",
+      "excerpt": "German Rail Network Paralysis: Germany's national rail carrier, Deutsche Bahn, experienced a severe nationwide IT failure that halted train services for several hours. While operations have since resumed, the incident has prompted the German Priva...",
+      "date": "2026-06-24T03:33:29.200Z",
+      "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/972f/live/e72ad600-6f5a-11f1-8546-8f19e4fe30f4.jpg",
+      "bottom_image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/972f/live/e72ad600-6f5a-11f1-8546-8f19e4fe30f4.jpg",
+      "body": "## WORLD\n\n* **German Rail Network Paralysis:** Germany's national rail carrier, Deutsche Bahn, experienced a severe nationwide IT failure that halted train services for several hours. While operations have since resumed, the incident has prompted the German Private Railway Association to demand a formal investigation into the systemic vulnerability that caused the disruption.\n* **Conflicting Reports on Nuclear Negotiations:** Tensions persist regarding the state of nuclear diplomacy between the U.S. and Iran. While President Trump claims Iran has committed to \"highest level\" inspections, Iranian officials have openly contradicted this account, asserting that no substantial discussions on the nuclear issue have taken place, highlighting a continued stalemate in narrative and policy.\n\n## POLAND\n\n* **Healthcare Scandal at Warsaw’s Southern Hospital:** The Southern Hospital in Warsaw has become the center of a major public and political controversy following allegations by a whistleblower, Dr. Emil Jędrzejewski. Former staff have accused the facility of serious medical mismanagement and professional negligence on its emergency ward.\n* **Political Fallout and Official Inquiries:** In response to the allegations, Warsaw Mayor Rafał Trzaskowski has announced plans to petition the Prosecutor General for a thorough investigation. Simultaneously, the issue has fueled partisan clashes, with opposition politicians demanding transparency regarding claims of exclusive \"VIP facilities\" within the hospital, further intensifying the scrutiny of the city’s healthcare administration."
+    },
+    {
+      "author": "Michał Rukszan",
       "title": "Infrastructure Collapse in Germany and Political Reshuffling in Poland",
       "slug": "2026-06-23-ai-news-22",
       "excerpt": "Nationwide Rail Paralysis in Germany: Deutsche Bahn, Germany's primary rail operator, has suspended all train services across the country due to a critical IT malfunction. Reports indicate that a failure in the radio communication system has force...",
