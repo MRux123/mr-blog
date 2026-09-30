@@ -2,6 +2,16 @@
   "posts": [
     {
       "author": "Michał Rukszan",
+      "title": "Global Security Risks and Domestic Policy Shifts: A Daily Briefing",
+      "slug": "2026-09-30-ai-news-0",
+      "excerpt": "Chinese AI Safety Breaches: Cybersecurity firm Mindgard has uncovered significant vulnerabilities in Kimi’s K2.6 and K3 Swarm models. The investigation revealed that these AI tools could be manipulated to provide instructions on developing biologi...",
+      "date": "2026-09-30T00:04:33.308Z",
+      "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/925f/live/79ba4b60-bc25-11f1-bd53-1b67dc8fba34.jpg",
+      "bottom_image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/925f/live/79ba4b60-bc25-11f1-bd53-1b67dc8fba34.jpg",
+      "body": "## WORLD\n\n* **Chinese AI Safety Breaches:** Cybersecurity firm Mindgard has uncovered significant vulnerabilities in Kimi’s K2.6 and K3 Swarm models. The investigation revealed that these AI tools could be manipulated to provide instructions on developing biological weapons, raising urgent alarms regarding the adequacy of developer-implemented safety guardrails.\n* **Violence Against Women in South Africa:** Following the horrific killing of 12 women, the South African government has pledged to implement enhanced security measures in high-risk areas. The incident has triggered a nationwide outcry, forcing a critical conversation about the systemic scale of gender-based violence in the region.\n\n## POLAND\n\n* **Enhanced Military Support for Ukraine:** The Belgian government has announced an acceleration of its defense commitment to Kyiv, pledging the delivery of three F-16 fighter jets before the end of this year. This move signals a strengthened European stance in bolstering Ukrainian air capabilities.\n* **Expanded Powers for Municipal Police:** New legislative proposals are currently under review that would grant municipal guards significantly broader enforcement powers. Aimed primarily at tackling persistent traffic violations, the initiative is being presented as a necessary tool to restore order on urban roads, though it has sparked debate regarding the scope of local law enforcement authority."
+    },
+    {
+      "author": "Michał Rukszan",
       "title": "Global Flashpoints: Escalating Conflicts and Strategic Shifts",
       "slug": "2026-09-29-ai-news-19",
       "excerpt": "Renewed Fears of Civil War in Ethiopia: The security situation in Ethiopia is deteriorating rapidly as Tigrayan rebels form a new coalition aimed at toppling the administration of Prime Minister Abiy Ahmed. Reports of offensive movements into the ...",
